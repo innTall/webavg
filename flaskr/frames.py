@@ -5,9 +5,9 @@ from pandas import DataFrame as df
 
 pd.set_option('precision', 8)
 
-def get_candles():
-  frame_c1 = df()
-  frame.date = frame_c1[0]
+def get_candles(candles):
+  frame_c1 = df(candles)
+  frame_date = frame_c1[0]
   final_date = []
   for time in frame_date.unique():
     readable = datetime.fromtimestamp(int(time/1000))
@@ -24,8 +24,8 @@ def get_candles():
   frame_c3['active'] = pd.to_numeric(frame_c3['active'])
   frame_c3['buy'] = pd.to_numeric(frame_c3['buy'])
   return frame_c3
-gc = get_candles()
-
+# gc = get_candles()
+'''
 def get_trades():
   trade_list = list()
   frame_t1 = df(trade_list)
@@ -52,3 +52,4 @@ def get_trades():
   frame_t2['market'] = frame_t2['price'] * (frame_t2['active'] * maker_int['maker'])
   return frame_t2
 gt = get_trades()
+'''
