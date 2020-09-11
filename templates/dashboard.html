@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+<title>{% block title %}Dashboard{% endblock %}</title>
+
+{% block chart %}
+<div class="btn-group btn-group-sm">
+  {% for interval in intervals %}
+    <button type="button" id="test" class="btn btn-outline-outline-primary">{{interval}}</button>
+  {% endfor %}
+</div>
+<div class="chart" id='candle_chart'></div>
+{% endblock %}
+{% block scripts %}
+<script>
+  // Create candlestick chart
+  const graphs = {{candle_chart | safe}}
+  Plotly.plot('candle_chart', graphs, {});
+
+  // Parse url
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const symbol = urlParams.get('symbol')
+
+  // Update chart when change interval
+  const button = document.querySelector('#test');
+  document.querySelectorAll('.btn-outline-primary').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault;
+      const interval = item.innerHTML;
+      $.post('/dashboard', {
+        symbol,
+        interval
+      }).done((response) => {
+        const candle_chart = JSON.parse(response);
+        Plotly.react('candle-chart', candleChart, {});
+      }).fail(() => {
+        console.log("{{ ('Error: Could not contact server.') }}");
+      });
+    });
+  });
+</script>
+{% endblock %}
