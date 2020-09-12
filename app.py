@@ -15,7 +15,7 @@ def index():
 def get_dashboard():
   intervals = ['1m', '5m', '15m', '1h', '4h', '1d', '3d', '1w', '1M']
   if request.method == 'POST':
-    symbol = request.form['symbol']
+    symbol = request.files['symbol']
     interval = request.form['interval']
     candles = client.get_klines(symbol=symbol, interval=interval)
     candle_data = get_candles(candles)

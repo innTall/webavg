@@ -213,3 +213,4 @@ def grands_orders_of_trades(ft10, a15):
   frame13t = df(frame12t, columns=['date', 'price', 'buy', 'sell', 'trade', 'order'])
   return frame11t, frame13t
   ft11, ft13 = grands_orders_of_trades(ft10, a15)
+  
