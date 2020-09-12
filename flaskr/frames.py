@@ -24,10 +24,10 @@ def get_candles(candles):
   frame_c3['active'] = pd.to_numeric(frame_c3['active'])
   frame_c3['buy'] = pd.to_numeric(frame_c3['buy'])
   return frame_c3
-gc = get_candles()
+  gc = get_candles()
 
-def get_trades():
-  trade_list = list()
+def get_trades(trades):
+  trade_list = list(trades)
   frame_t1 = df(trade_list)
   new_date = []
   for time in frame_t1['T']:
@@ -51,7 +51,7 @@ def get_trades():
   frame_t2 = pd.concat([date, price_float, active_float], axis=1)
   frame_t2['market'] = frame_t2['price'] * (frame_t2['active'] * maker_int['maker'])
   return frame_t2
-gt = get_trades()
+  gt = get_trades()
 
 def all_parameters_of_prices(gc, gt):
   last_price = gt['price'].iloc[-1]
@@ -63,7 +63,7 @@ def all_parameters_of_prices(gc, gt):
   gt['market'] = np.abs(gt['market'])
   avr_tr = round(sum(gt['market']) / sum(gt['active']), 4)
   return last_price, min_can, max_can, avr_can, min_tr, max_tr, avr_tr
-pl, mic, mac, avc, mit, mat, avt = all_parameters_of_prices(gc, gt)
+  pl, mic, mac, avc, mit, mat, avt = all_parameters_of_prices(gc, gt)
 
 def percent_scale_of_candle_price(pl, mic, mac, unit=15):
   buy_ticks = int(round((pl - mic) * unit // (mac - mic)))
@@ -78,7 +78,7 @@ def percent_scale_of_candle_price(pl, mic, mac, unit=15):
   down_scale = pl - pl * np.array(res_buy)
   scale_can = np.hstack((up_scale, down_scale))
   return scale_can
-perc = percent_scale_of_candle_price(pl, mic, mac, unit=15)
+  perc = percent_scale_of_candle_price(pl, mic, mac, unit=15)
 
 def percent_scale_of_trade_price(pl, mit, mat, unit=15):
   buy_ticks = int(round((pl - mit) * unit // (mat - mit)))
@@ -93,7 +93,7 @@ def percent_scale_of_trade_price(pl, mit, mat, unit=15):
   down_scale = pl - pl * np.array(res_buy)
   scale_tr = np.hstack((up_scale, down_scale))
   return scale_tr
-pert = percent_scale_of_trade_price(pl, mit, mat, unit=15)
+  pert = percent_scale_of_trade_price(pl, mit, mat, unit=15)
 
 def levels_of_price_candles(avc, mic, mac):
   down = round((avc - mic) / 3, 8)
@@ -103,7 +103,7 @@ def levels_of_price_candles(avc, mic, mac):
   buy_up = avc + up
   sell_up = mac - up
   return buy_down, sell_down, buy_up, sell_up
-onec, twoc, fourc, fivec = levels_of_price_candles(avc, mic, mac)
+  onec, twoc, fourc, fivec = levels_of_price_candles(avc, mic, mac)
 
 def levels_of_price_trades(avt, mit, mat):
   down = round((avt - mit) / 3, 8)
@@ -113,7 +113,7 @@ def levels_of_price_trades(avt, mit, mat):
   buy_up = avt + up
   sell_up = mat - up
   return buy_down, sell_down, buy_up, sell_up
-onet, twot, fourt, fivet = levels_of_price_trades(avt, mit, mat)
+  onet, twot, fourt, fivet = levels_of_price_trades(avt, mit, mat)
 
 def base_tabel_of_candles(gc):
   frame1c = df(gc, columns=['date', 'price', 'open', 'high', 'low', 'close', 'active', 'market', 'buyA', 'buy', 'sell'])
@@ -124,7 +124,7 @@ def base_tabel_of_candles(gc):
   frame3c = df(frame2c, columns=['date', 'price', 'market', 'buy', 'sell', 'active', 'delta', '%'])
   frame3c['%'] = round((frame2c['delta'] / grame2c['buy']) * 100, 2)
   return frame1c, frame3c
-fc1, fc3 = base_tabel_of_candles(gc)
+  fc1, fc3 = base_tabel_of_candles(gc)
 
 def base_tabel_of_trades(gt):
   framet = df(gt, columns=['date', 'price', 'market', 'active', 'sell'])
@@ -132,7 +132,7 @@ def base_tabel_of_trades(gt):
   framet = df(framet.rename(columns={'market': 'buy'}))
   frame1t = df(framet, columns=['date', 'price', 'buy', 'sell'])
   return framet, frame1t
-ft, ft1 = base_tabel_of_trades(gt)
+  ft, ft1 = base_tabel_of_trades(gt)
 
 def volume_percent_of_delta_candles(fc3):
   frame4c = df(fc3, columns=['date', 'price', 'market', 'buy', 'sell', 'delta', '%', 'rsi', 'macd', 'ao'])
@@ -143,7 +143,7 @@ def volume_percent_of_delta_candles(fc3):
   frame8c = df(frame7c, columns=['sell', 'delta', '%'])
   # frame8b['%'] = np.log(frame8b.iloc[:, :])
   return frame4c, frame5c, frame7c, frame8c
-fc4, fc5, fc7, fc8 = volume_percent_of_delta_candles(fc3)
+  fc4, fc5, fc7, fc8 = volume_percent_of_delta_candles(fc3)
 
 def variables_for_plots_of_volume_candles(fc1, fc4, fc5, fc7, fc8):
   numstr = len(fc1['open'])
@@ -161,12 +161,12 @@ def variables_for_plots_of_volume_candles(fc1, fc4, fc5, fc7, fc8):
   diff_bs = max(diff_mbuy, diff_msell)
   return numstr, first_date, last_date, vol_max, vol_mbuy, vol_msell, 
   vol_bs, vol_aver, delta_buy, delta_sell, diff_mbuy, diff_msell, diff_bs
-nums, daya, dayz, vmc, vmb, vms, vbs, vav, delb, dels, difb, difs, dibs = variables_for_plots_of_volume_candles(fc1, fc4, fc5, fc7, fc8)
+  nums, daya, dayz, vmc, vmb, vms, vbs, vav, delb, dels, difb, difs, dibs = variables_for_plots_of_volume_candles(fc1, fc4, fc5, fc7, fc8)
 
 def pivot_volume_price_candles(fc4):
   total1 = fc4.pivot_table(['market'], ['price'], aggfunc='sum')
   return total1
-piv_tab = pivot_volume_price_candles(fc4)
+  piv_tab = pivot_volume_price_candles(fc4)
 
 def tabel_of_separated_buy_sell_orders(ft1):
   frame2t = ft1[ft1['buy'] > 0] # выбор значений - бай
@@ -184,7 +184,7 @@ def tabel_of_separated_buy_sell_orders(ft1):
   frame9t = frame4t.combine_first(frame8t) # объединить бай и селл таблицы
   frame10t = df(frame9t, columns=['date', 'price', 'buy', 'sell', 'trade', 'order']) # объединенная таблица
   return frame4t, frame8t, frame10t
-ft4, ft8, ft10 = tabel_of_separated_buy_sell_orders(ft1)
+  ft4, ft8, ft10 = tabel_of_separated_buy_sell_orders(ft1)
 
 def variables_for_plots_trades(ft, ft4, ft8, period=15):
   first = ft['date'].iloc[0] # первая дата периода ордеров
@@ -203,7 +203,7 @@ def variables_for_plots_trades(ft, ft4, ft8, period=15):
   vol_aver = (summa_buy + summa_sell) / 2 # среднее ордеров по объемам (бай/селл)
   aver15 = round((ave_buy + ave_sell) / 2, 4) # средний по 15мин (бай/селл)
   return first, last, ave_buy, max_buy, ave_sell, max_sell, abs_max, min_ave, vol_aver, aver15
-fd, ld, aveb, maxb, aves, maxs, maxabs, minave, vave, a15 = variables_for_plots_trades(ft, ft4, ft8, period=15)
+  fd, ld, aveb, maxb, aves, maxs, maxabs, minave, vave, a15 = variables_for_plots_trades(ft, ft4, ft8, period=15)
 
 def grands_orders_of_trades(ft10, a15):
   ft10['trade'] = np.where(pd.isnull(ft10['buy']), ft10['sell'], 
@@ -212,4 +212,4 @@ def grands_orders_of_trades(ft10, a15):
   frame12t = frame11t[frame11t['trade'] > a15] # выбор всех ордеров больше значения 15 мин
   frame13t = df(frame12t, columns=['date', 'price', 'buy', 'sell', 'trade', 'order'])
   return frame11t, frame13t
-ft11, ft13 = grands_orders_of_trades(ft10, a15)
+  ft11, ft13 = grands_orders_of_trades(ft10, a15)
