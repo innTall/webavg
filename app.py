@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 from binance.client import Client
+# import flaskr.frames
 from flaskr.frames import get_candles
+from flaskr.frames import get_trades
 from flaskr.charts import candlestick_chart
+# from flaskr.frames import volume_percent_of_delta_candles
+# from flaskr.charts import volume_chart
 
 client = Client()
 
@@ -28,4 +32,3 @@ def get_dashboard():
     candle_data = get_candles(candles)
     candle_chart = candlestick_chart(candle_data)
     return render_template('dashboard.html', candle_chart=candle_chart, intervals=intervals)
-    
