@@ -2,8 +2,15 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from pandas import DataFrame as df
+#from binance.client import Client
 
 pd.set_option('precision', 8)
+
+#client = Client()
+#name = 'ZENBNB'
+
+#candles = client.get_klines(symbol=name, interval=Client.KLINE_INTERVAL_4HOUR)
+#trades = client.aggregate_trade_iter(symbol=name, start_str='2 days ago UTC')
 
 def get_candles(candles, unit=15):
   frame1c = df(candles)
@@ -30,9 +37,9 @@ def get_candles(candles, unit=15):
                'close', 'active', 'market', 'buy', 'sell', '%'])
   frame4c['price'] = round((frame4c['market'] / frame4c['active']), 8)
   frame4c['sell'] = round((frame4c['market'] - frame4c['buy']), 8)
+  frame4c['diff'] = frame4c['buy'] - frame4c['sell']
   frame4c['%'] = round(((frame4c['buy'] - frame4c['sell']) *100 / frame4c['sell']), 2)
-  total = frame4c.pivot_table(['buy', 'sell', 'market'], ['price'], aggfunc='sum')
-  
+  total = frame4c.pivot_table(['buy', 'sell', 'market', 'diff'], ['price'], aggfunc='sum')
   last_price = frame4c['price'].iloc[-1]
   min_can = min(frame4c['low'])
   max_can = max(frame4c['high'])
@@ -50,14 +57,12 @@ def get_candles(candles, unit=15):
   up_scale = last_price + last_price * np.array(res_sell) # процентная шкала вверх от текущей цены
   down_scale = last_price - last_price * np.array(res_buy) # процентная шкала вниз от текущей цены
   scale_can = np.hstack((up_scale, down_scale)) # создание массива % значений
-  
   down = round(((avr_can - min_can) / 3), 8) # 3 зоны вниз от средней
   buy_down = min_can + down # нижняя бай-зона
   sell_down = avr_can - down # нижняя селл-зона
   up = round(((max_can - avr_can) / 3), 8) # 3 зоны вверх от средней
   buy_up = avr_can + up # верхняя бай-зона
   sell_up = max_can - up # верхняя селл-зона
-   
   numstr = len(frame4c['open'])
   first_date = frame4c['date'].iloc[0]
   last_date = frame4c['date'].iloc[-1]
@@ -69,12 +74,17 @@ def get_candles(candles, unit=15):
   diff_mbuy = max(frame4c['%'])
   diff_msell = max(np.abs(frame4c['%']))
   diff_bs = max(diff_mbuy, diff_msell)
-  return (frame4c, total, last_price, min_can, max_can, avr_can, scale_can, buy_down, sell_down,
-        buy_up, sell_up, numstr, first_date, last_date, vol_max, vol_mbuy, vol_msell, vol_bs,
-        diff_mbuy, vol_aver, diff_mbuy, diff_msell, diff_bs)
-  gc = get_candles(candles, unit=15)
-# export_csv = gc.to_csv (r'C:\Users\Usuario\downloads\gc.csv', index = True, header=True)
-# print(gc)
+  return frame4c, total, last_price, min_can, max_can, avr_can, scale_can, buy_down, sell_down,\
+  buy_up, sell_up, numstr, first_date, last_date, vol_max, vol_mbuy, vol_msell, vol_bs,\
+  vol_aver, diff_mbuy, diff_msell, diff_bs
+
+  gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb, vms,\
+  vbs, vav, dmb, dms, dbs = get_candles(candles, unit=15)
+  #export_csv = gc.to_csv (r"C:\Users\Usuario\downloads\gc1.csv", index = True, header=True)
+  #export_csv = piv.to_csv (r"C:\Users\Usuario\downloads\piv1.csv", index = True, header=True)
+  #print(f'lpc={lpc}, mic={mic}, mac={mac}, avc={avc}, scac={scac}, buyd={buyd}, selld={selld},\
+  #buyu={buyu}, sellu={sellu}, nums={nums}, fd={fd}, ld={ld}, vma={vma}, vmb={vmb},\
+  #vms={vms}, vbs={vbs}, vav={vav}, dmb={dmb}, dms={dms}, dbs={dbs}')
 
 def get_trades(trades, unit=15, period=15):
   trade_list = list(trades)
@@ -119,7 +129,8 @@ def get_trades(trades, unit=15, period=15):
   frame6t['order'] = 'buy' # вставить тип ордера
   frame7t = frame4t.combine_first(frame6t) # объединить бай и селл таблицы
   frame8t = df(frame7t, columns=['date', 'price', 'market', 'active', 'buy', 'sell', 'order']) # объединенная таблица
-  
+  totalt2 = frame8t.pivot_table(['price', 'buy', 'sell'], ['date'], aggfunc='sum')
+
   last_price = frame8t['price'].iloc[-1]
   min_tr = min(frame8t['price'])
   max_tr = max(frame8t['price'])
@@ -166,10 +177,16 @@ def get_trades(trades, unit=15, period=15):
   frame9t = df(frame8t, columns=['date', 'price', 'market', 'buy', 'sell', 'order']) # почти финальная таблица
   frame10t = frame9t[frame9t['market'] > aver15] # выбор всех ордеров больше значения 15 мин
   frame11t = df(frame10t, columns=['date', 'price', 'market', 'buy', 'sell', 'order'])
-  return (frame3t, frame8t, frame11t, last_price, min_tr, max_tr, avr_tr, scale_tr, buy_down,
-         sell_down, buy_up, sell_up, first, last, ave_buy, max_buy, ave_sell, max_sell, abs_max,
-         min_ave, vol_aver, aver15)
-  gt = get_trades(trades, unit=15, period=15)
-# export_csv = ft1.to_csv (r'C:\Users\Usuario\downloads\ft1.csv', index = True, header=True)
-# export_csv = ft2.to_csv (r'C:\Users\Usuario\downloads\ft2.csv', index = True, header=True)
-  print(gt)
+  totalt3 = frame11t.pivot_table(['price', 'buy', 'sell'], ['date'], aggfunc='sum')
+  return totalt2, frame8t, frame11t, totalt3, last_price, min_tr, max_tr, avr_tr, scale_tr,\
+  buy_down, sell_down, buy_up, sell_up, first, last, ave_buy, max_buy, ave_sell, max_sell,\
+  abs_max, min_ave, vol_aver, aver15
+  
+  tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,\
+  avs, mas, absma, miav, vav, a15 = get_trades(trades, unit=15, period=15)
+#export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
+#export_csv = tot2.to_csv (r'C:\Users\Usuario\downloads\tot2.csv', index = True, header=True)
+#export_csv = tot3.to_csv (r'C:\Users\Usuario\downloads\tot3.csv', index = True, header=True)
+#print(f'lp={lp}, mit={mit}, mat={mat}, avt={avt}, scat={scat}, buyd={buyd}, selld={selld},\
+#buyu={buyu}, sellu={sellu}, fd={fd}, ld={ld}, avb={avb}, mab={mab}, avs={avs},\
+#mas={mas}, absma={absma}, miav={miav}, vav={vav}, a15={a15}')

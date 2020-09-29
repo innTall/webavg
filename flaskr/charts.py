@@ -5,39 +5,73 @@ from pandas import DataFrame as df
 import plotly
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import math as m
 import json
 
-def candlestick_chart(candle_data):
+def candlestick_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,\
+ fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
 
   fig = make_subplots(rows=4, cols=1,
-    shared_xaxes=True,
-    vertical_spacing=0.02,
-    print_grid=True,
+    shared_xaxes=True, # связывание осей x
+    vertical_spacing=0.02, # интервал по вертикали
+    print_grid=True, # текстовое представление Subplot
     specs=[[{'rowspan': 2}],
-        [None],
-        [{'rowspan': 1}],
-        [{'rowspan': 1}]],
-    )
+          [None],
+          [{'rowspan': 1}], # ], Create figure with secondary y-axis
+          [{'rowspan': 1}], # {'secondary_y': False}
+          ] 
+  )
   
-  data = candle_data
+  data = gc
   data = fig.add_trace(
     go.Candlestick(
       x=data['date'],
       open=data['open'],
       high=data['high'],
       low=data['low'],
-      close=data['close']
-    )
+      close=data['close']),
+      secondary_y=False
+  )
+  
+  data = gc
+  data = fig.add_trace(go.Scatter(
+        x=data['date'], y=data['buy'], name='volbuy'),
+        row=3, col=1
+  )     , #, secondary_y=False)
+        # ) range=[0, vbs]
+  
+  data = gc
+  data = fig.add_trace(go.Scatter(
+        x=data['date'], y=data['sell'], name='volsell'),
+        row=3, col=1, #, secondary_y=False
+  )
+        # ) range=[0, vbs],
+
+  data = gc
+  data = fig.add_trace(go.Bar(
+        x=data['date'], y=data['%'], name='delta%'), 
+        row=3, col=1 #, secondary_y=True
   )
 
-  fig.add_trace(go.Scatter(x=['date'], y=[5, 13], name='volume'), row=3, col=1)
-  fig.add_trace(go.Scatter(x=['date'], y=[0.2, 0.8], name='rsi'), row=4, col=1)
+  data = gc
+  data = fig.add_trace(go.Scatter(
+        x=data['date'], y=data['sell'], name='macd'), row=4, col=1)
 
+  data = gc
+  data = fig.add_trace(go.Scatter(
+        x=data['date'], y=data['buy'], name='rsi'), row=4, col=1)
+  
   fig.update_layout(xaxis_rangeslider_visible=False,
                   margin=dict(l=0, r=0, t=0, b=0))
-  
+
   graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
+  
+  
+  #row_heights=[0.6, 0.2, 0.2], # относительная высота строк Subplot
+  # Set y-axes titles
+  #fig.update_yaxes(title_text="<b>primary</b> yaxis title", secondary_y=False)
+  #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
 
 # fig.show()
 # fig.update_layout(height=600, width=600, title_text="specs examples")
