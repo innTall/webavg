@@ -8,7 +8,6 @@ from flaskr.charts import candlestick_chart
 client = Client()
 
 app = Flask(__name__)
-app.debug = True
 
 @app.route('/')
 def index():
@@ -20,18 +19,18 @@ def get_dashboard():
   if request.method == 'POST':
     symbol = request.form['symbol']
     interval = request.form['interval']
-    candles = client.get_klines(symbol=symbol, interval=interval)
-    gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb,\
-    vms, vbs, vav, dmb, dms, dbs = get_candles(candles, unit=15)
-    candle_chart = candlestick_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu,\
+    candles = client.get_klines(symbol=symbol, intervals=intervals)
+    (gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb,
+    vms, vbs, vav, dmb, dms, dbs) = get_candles(candles, unit=15)
+    candle_chart = candlestick_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu,
     sellu, nums, fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs)
     return candle_chart
   else:
     symbol = request.args['symbol']
     interval = '1h'
     candles = client.get_klines(symbol=symbol, interval=interval)
-    gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb,\
-    vms, vbs, vav, dmb, dms, dbs = get_candles(candles, unit=15)
-    candle_chart = candlestick_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu,\
-    sellu, nums, fd, ld, vma, vmb, vms,vbs, vav, dmb, dms, dbs)
+    (gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb,
+    vms, vbs, vav, dmb, dms, dbs) = get_candles(candles, unit=15)
+    candle_chart = candlestick_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu,
+    sellu, nums, fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs)
     return render_template('dashboard.html', candle_chart=candle_chart, intervals=intervals)

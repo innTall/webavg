@@ -3,9 +3,9 @@
 <title>{% block title %}Dashboard{% endblock %}</title>
 
 {% block chart %}
-<div class="btn-group btn-group-sm">
+<div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
   {% for interval in intervals %}
-    <button type="button" id="test" class="btn btn-outline-outline-primary">{{interval}}</button>
+    <button type="button" id="test" class="btn btn-outline-info">{{interval}}</button>
   {% endfor %}
 </div>
 <div class="chart" id='candle_chart'></div>

@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from pandas import DataFrame as df
+import ta
 #from binance.client import Client
 
 pd.set_option('precision', 8)
@@ -33,12 +34,15 @@ def get_candles(candles, unit=15):
   frame3c['buy'] = pd.to_numeric(frame3c['buy'])
   frame3c['low'] = pd.to_numeric(frame3c['low'])
   frame3c['high'] = pd.to_numeric(frame3c['high'])
+  frame3c['close'] = pd.to_numeric(frame3c['close'])
   frame4c = df(frame3c, columns=['date', 'price', 'open', 'high', 'low',
-               'close', 'active', 'market', 'buy', 'sell', '%'])
+               'close', 'active', 'market', 'buy', 'sell', '%', 'ao', 'rsi'])
   frame4c['price'] = round((frame4c['market'] / frame4c['active']), 8)
   frame4c['sell'] = round((frame4c['market'] - frame4c['buy']), 8)
   frame4c['diff'] = frame4c['buy'] - frame4c['sell']
   frame4c['%'] = round(((frame4c['buy'] - frame4c['sell']) *100 / frame4c['sell']), 2)
+  frame4c['ao'] = ta.momentum.ao(high=frame4c['high'], low=frame4c['low'])
+  frame4c['rsi'] = ta.momentum.rsi(close=frame4c['close'])
   total = frame4c.pivot_table(['buy', 'sell', 'market', 'diff'], ['price'], aggfunc='sum')
   last_price = frame4c['price'].iloc[-1]
   min_can = min(frame4c['low'])
@@ -74,17 +78,17 @@ def get_candles(candles, unit=15):
   diff_mbuy = max(frame4c['%'])
   diff_msell = max(np.abs(frame4c['%']))
   diff_bs = max(diff_mbuy, diff_msell)
-  return frame4c, total, last_price, min_can, max_can, avr_can, scale_can, buy_down, sell_down,\
-  buy_up, sell_up, numstr, first_date, last_date, vol_max, vol_mbuy, vol_msell, vol_bs,\
-  vol_aver, diff_mbuy, diff_msell, diff_bs
+  return (frame4c, total, last_price, min_can, max_can, avr_can, scale_can, buy_down, sell_down,
+  buy_up, sell_up, numstr, first_date, last_date, vol_max, vol_mbuy, vol_msell, vol_bs,
+  vol_aver, diff_mbuy, diff_msell, diff_bs)
 
-  gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb, vms,\
-  vbs, vav, dmb, dms, dbs = get_candles(candles, unit=15)
-  #export_csv = gc.to_csv (r"C:\Users\Usuario\downloads\gc1.csv", index = True, header=True)
-  #export_csv = piv.to_csv (r"C:\Users\Usuario\downloads\piv1.csv", index = True, header=True)
-  #print(f'lpc={lpc}, mic={mic}, mac={mac}, avc={avc}, scac={scac}, buyd={buyd}, selld={selld},\
-  #buyu={buyu}, sellu={sellu}, nums={nums}, fd={fd}, ld={ld}, vma={vma}, vmb={vmb},\
-  #vms={vms}, vbs={vbs}, vav={vav}, dmb={dmb}, dms={dms}, dbs={dbs}')
+  (gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb, vms,
+  vbs, vav, dmb, dms, dbs) = get_candles(candles, unit=15)
+#export_csv = gc.to_csv (r"C:\Users\Usuario\downloads\gc1.csv", index = True, header=True)
+#export_csv = piv.to_csv (r"C:\Users\Usuario\downloads\piv1.csv", index = True, header=True)
+#print(f'lpc={lpc}, mic={mic}, mac={mac}, avc={avc}, scac={scac}, buyd={buyd}, selld={selld},\
+#buyu={buyu}, sellu={sellu}, nums={nums}, fd={fd}, ld={ld}, vma={vma}, vmb={vmb},\
+#vms={vms}, vbs={vbs}, vav={vav}, dmb={dmb}, dms={dms}, dbs={dbs}')
 
 def get_trades(trades, unit=15, period=15):
   trade_list = list(trades)
@@ -178,12 +182,12 @@ def get_trades(trades, unit=15, period=15):
   frame10t = frame9t[frame9t['market'] > aver15] # выбор всех ордеров больше значения 15 мин
   frame11t = df(frame10t, columns=['date', 'price', 'market', 'buy', 'sell', 'order'])
   totalt3 = frame11t.pivot_table(['price', 'buy', 'sell'], ['date'], aggfunc='sum')
-  return totalt2, frame8t, frame11t, totalt3, last_price, min_tr, max_tr, avr_tr, scale_tr,\
-  buy_down, sell_down, buy_up, sell_up, first, last, ave_buy, max_buy, ave_sell, max_sell,\
-  abs_max, min_ave, vol_aver, aver15
+  return (totalt2, frame8t, frame11t, totalt3, last_price, min_tr, max_tr, avr_tr, scale_tr,
+  buy_down, sell_down, buy_up, sell_up, first, last, ave_buy, max_buy, ave_sell, max_sell,
+  abs_max, min_ave, vol_aver, aver15)
   
-  tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,\
-  avs, mas, absma, miav, vav, a15 = get_trades(trades, unit=15, period=15)
+  (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
+  avs, mas, absma, miav, vav, a15) = get_trades(trades, unit=15, period=15)
 #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
 #export_csv = tot2.to_csv (r'C:\Users\Usuario\downloads\tot2.csv', index = True, header=True)
 #export_csv = tot3.to_csv (r'C:\Users\Usuario\downloads\tot3.csv', index = True, header=True)
