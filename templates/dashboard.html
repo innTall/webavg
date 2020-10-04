@@ -13,8 +13,12 @@
 {% block scripts %}
 <script>
   // Create candlestick chart
-  const graphs = {{candle_chart | safe}}
-  Plotly.plot('candle_chart', graphs, {});
+  const graphs = {{candle_chart | safe}}    
+  Plotly.plot('candle_chart', graphs, {});  
+  //const graphs = {{trade_chart | safe}}    <div class="chart" id='trade_chart'></div>
+  //Plotly.plot('trade_chart', graphs, {});
+  //const graphs = {{small_chart | safe}}    <div class="chart" id='small_chart'></div>
+  //Plotly.plot('small_chart', graphs, {});
 
   // Parse url
   const queryString = window.location.search;
@@ -32,7 +36,7 @@
         interval
       }).done((response) => {
         const candle_chart = JSON.parse(response);
-        Plotly.react('candle-chart', candleChart, {});
+        Plotly.react('candle_chart', candleChart, {});
       }).fail(() => {
         console.log("{{ ('Error: Could not contact server.') }}");
       });

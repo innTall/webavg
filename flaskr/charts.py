@@ -130,8 +130,8 @@ fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
   graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 '''
-def order_chart(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
-    avs, mas, absma, miav, vav, a15):
+def order_chart(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu,
+fd, ld, avb, mab, avs, mas, absma, miav, vav, a15):
 
   fig = make_subplots(rows=3, cols=1,
     shared_xaxes=True, # связывание осей x
@@ -143,38 +143,37 @@ def order_chart(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buy
     ]
   )
   
-  x = gc['date']
-  y1 = gc['price']
-  y2 = gc['buy']
-  y3 = gc['sell']
-  y4 = gc['ao'] #gc['ao'] = ta.utils.dropna(gc['ao'])
-  y5 = gc['rsi'] #gc['rsi'] = ta.utils.dropna(gc['rsi'])
-    
-  
+  x = f8t['date']
+  x1 = f8t['market']
+  y1 = f8t['price']
+  y2 = f8t['buy']
+  y3 = f8t['sell']
+
+  f8t = fig.add_trace(go.Scatter(x=x, y=y2, name='buyorder',
+                        line = dict(width = 1, color = '#006400')
+                        ), row=1, col=1, secondary_y=False
+  )
+             
+  f8t = fig.add_trace(go.Scatter(x=x, y=y3, name='sellorder',
+                        line = dict(width = 1, color = '#FF0000')
+                        ), row=1, col=1, secondary_y=False
+  )
+          
+  f8t = fig.add_trace(go.Bar(x=x, y=y1, name='volprice',
+                      marker = dict(
+                        line = dict(width = 1, color = '#6A5ACD')
+                      )), row=3, col=1, secondary_y=True
+  )
+
   fig.update_layout(xaxis_rangeslider_visible=False,
-                  xaxis = dict(
-                    showgrid = False,
-                    showline = False,
-                    showticklabels = False,
-                    gridwidth = 1
-                  ),
-                  yaxis = dict(
-                    showgrid = False,
-                    showline = True,
-                    gridcolor = '#bdbdbd',
-                    gridwidth = 1,
-                    tickfont = dict(
-                      family = 'Old Standard TT, serif',
-                      size = 10,
-                      color = 'blue'
-                    )
-                  ),
+                  paper_bgcolor='rgba(0,0,0,0)',
+                  plot_bgcolor='rgba(0,0,0,0)',
                   margin=dict(l=0, r=0, t=0, b=0))
  
-  graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(f8t, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON  
 
-def small_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,
+def simple_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,
 fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
 
   x = gc['date']
@@ -183,14 +182,20 @@ fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
   y3 = gc['low']
   y4 = gc['close']
 
-trace = go.Candlestick(
-   x = x,
-   open = y1, 
-   high = y2,
-   low = y3, 
-   close = y4
-)
-fig.update_layout(xaxis_rangeslider_visible=False,
+  fig = go.Figure(gc=[go.Candlestick(
+                  x = x, open = y1, high = y2, low = y3, close = y4, name = 'btc',
+                  line = dict(width=1),
+                  increasing = dict(
+                    line = dict(color = '#008000', width = 1)
+                  ),
+                  decreasing = dict(
+                    line = dict(color = '#FF0000', width = 1)
+                  ))]                
+  )
+    
+  fig.update_layout(xaxis_rangeslider_visible=False,
+                  paper_bgcolor='rgba(0,0,0,0)',
+                  plot_bgcolor='rgba(0,0,0,0)',
                   margin=dict(l=0, r=0, t=0, b=0))
  
   graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
@@ -207,4 +212,3 @@ fig.update_layout(xaxis_rangeslider_visible=False,
 # py.image.save_as({'data':data}, 'scatter_plot', format='png')
 # py.image.save_as(fig, 'my_plot.png')
 '''
-
