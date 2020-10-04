@@ -9,17 +9,17 @@
   {% endfor %}
 </div>
 <div class="chart" id='candle_chart'></div>
+<div class="chart" id='small_chart'></div>
 {% endblock %}
 {% block scripts %}
 <script>
   // Create candlestick chart
   const graphs = {{candle_chart | safe}}    
-  Plotly.plot('candle_chart', graphs, {});  
-  //const graphs = {{trade_chart | safe}}    <div class="chart" id='trade_chart'></div>
-  //Plotly.plot('trade_chart', graphs, {});
-  //const graphs = {{small_chart | safe}}    <div class="chart" id='small_chart'></div>
-  //Plotly.plot('small_chart', graphs, {});
-
+  Plotly.plot('candle_chart', graphs, {});
+  
+  const graphs = {{small_chart | safe}}    
+  Plotly.plot('small_chart', graphs, {});
+    
   // Parse url
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -37,6 +37,8 @@
       }).done((response) => {
         const candle_chart = JSON.parse(response);
         Plotly.react('candle_chart', candleChart, {});
+        const small_chart = JSON.parse(response);
+        Plotly.react('small_chart', simpleChart, {});
       }).fail(() => {
         console.log("{{ ('Error: Could not contact server.') }}");
       });
@@ -44,3 +46,6 @@
   });
 </script>
 {% endblock %}
+
+<!--const graphs = {{trade_chart | safe}}    <div class="chart" id='trade_chart'></div>
+Plotly.plot('trade_chart', graphs, {});-->
