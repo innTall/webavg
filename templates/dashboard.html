@@ -5,20 +5,24 @@
 {% block chart %}
 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
   {% for interval in intervals %}
-    <button type="button" id="test" class="btn btn-outline-info">{{interval}}</button>
+    <button type="button" id="test" class="btn btn-outline-info">{{interval}}{{time}}</button>
   {% endfor %}
 </div>
 <div class="chart" id='candle_chart'></div>
+<div class="chart" id='trade_chart'></div>
 <div class="chart" id='small_chart'></div>
 {% endblock %}
 {% block scripts %}
 <script>
   // Create candlestick chart
-  const graphs = {{candle_chart | safe}}    
-  Plotly.plot('candle_chart', graphs, {});
+  const cand = {{candle_chart | safe}}    
+  Plotly.plot('candle_chart', cand, {});
   
-  const graphs = {{small_chart | safe}}    
-  Plotly.plot('small_chart', graphs, {});
+  const smal = {{small_chart | safe}}    
+  Plotly.plot('small_chart', smal, {});
+
+  const trad = {{trade_chart | safe}}    
+  Plotly.plot('trade_chart', trad, {});
     
   // Parse url
   const queryString = window.location.search;
@@ -33,12 +37,11 @@
       const interval = item.innerHTML;
       $.post('/dashboard', {
         symbol,
-        interval
+        interval,
+        time
       }).done((response) => {
         const candle_chart = JSON.parse(response);
         Plotly.react('candle_chart', candleChart, {});
-        const small_chart = JSON.parse(response);
-        Plotly.react('small_chart', simpleChart, {});
       }).fail(() => {
         console.log("{{ ('Error: Could not contact server.') }}");
       });

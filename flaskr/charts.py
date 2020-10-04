@@ -118,6 +118,49 @@ fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
   graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
+def order_chart(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu,
+fd, ld, avb, mab, avs, mas, absma, miav, vav, a15):
+
+  fig = make_subplots(rows=3, cols=1,
+    shared_xaxes=True, # связывание осей x
+    vertical_spacing=0.02, # интервал по вертикали
+    print_grid=True, # текстовое представление Subplot   {'rowspan': 2}
+    specs=[[{'rowspan': 2}],
+          [None],
+          [{'secondary_y': True}],
+    ]
+  )
+  
+  x = f8t['date']
+  x1 = f8t['market']
+  y1 = f8t['price']
+  y2 = f8t['buy']
+  y3 = f8t['sell']
+
+  f8t = fig.add_trace(go.Scatter(x=x, y=y1, name='price',
+                        line = dict(width = 1, color = '#006400')
+                        ), row=1, col=1, secondary_y=False
+  )
+             
+  f8t = fig.add_trace(go.Scatter(x=x, y=y2, name='buyorder',
+                        line = dict(width = 1, color = '#FF0000')
+                        ), row=3, col=1, secondary_y=False
+  )
+          
+  f8t = fig.add_trace(go.Bar(x=x, y=y3, name='sellorder',
+                      marker = dict(
+                        line = dict(width = 1, color = '#6A5ACD')
+                      )), row=3, col=1, secondary_y=False
+  )
+
+  fig.update_layout(xaxis_rangeslider_visible=False,
+                  paper_bgcolor='rgba(0,0,0,0)',
+                  plot_bgcolor='rgba(0,0,0,0)',
+                  margin=dict(l=0, r=0, t=0, b=0))
+ 
+  graphJSON = json.dumps(f8t, cls=plotly.utils.PlotlyJSONEncoder)
+  return graphJSON
+
 def simple_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,
 fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
 
@@ -143,65 +186,20 @@ fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
   )
   graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
+
 '''
-
-
   gc = fig.add_trace(go.Bar(x=y0, y=x0, name='volprice', orientation='h',
                       marker = dict(
                         line = dict(width = 1, color = '#6A5ACD')
                       )), row=1, col=1, #secondary_x=True
   )
+
    #dict(type='line', xref='x4', yref='y4', name='rsi', line_width=0.8,
                           #x0=fd, y0=30, x1=ld, y1=30, line_color='#A9A9A9',
                           #line = dict(dash='dot')),
                         #dict(type='line', xref='x4', yref='y4', name='rsi', line_width=0.8,
                           #x0=fd, y0=70, x1=ld, y1=70, line_color='#A9A9A9',
                           #line = dict(dash='dot'))],
-
-def order_chart(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu,
-fd, ld, avb, mab, avs, mas, absma, miav, vav, a15):
-
-  fig = make_subplots(rows=3, cols=1,
-    shared_xaxes=True, # связывание осей x
-    vertical_spacing=0.02, # интервал по вертикали
-    print_grid=True, # текстовое представление Subplot   {'rowspan': 2}
-    specs=[[{'rowspan': 2}],
-          [None],
-          [{'secondary_y': True}],
-    ]
-  )
-  
-  x = f8t['date']
-  x1 = f8t['market']
-  y1 = f8t['price']
-  y2 = f8t['buy']
-  y3 = f8t['sell']
-
-  f8t = fig.add_trace(go.Scatter(x=x, y=y2, name='buyorder',
-                        line = dict(width = 1, color = '#006400')
-                        ), row=1, col=1, secondary_y=False
-  )
-             
-  f8t = fig.add_trace(go.Scatter(x=x, y=y3, name='sellorder',
-                        line = dict(width = 1, color = '#FF0000')
-                        ), row=1, col=1, secondary_y=False
-  )
-          
-  f8t = fig.add_trace(go.Bar(x=x, y=y1, name='volprice',
-                      marker = dict(
-                        line = dict(width = 1, color = '#6A5ACD')
-                      )), row=3, col=1, secondary_y=True
-  )
-
-  fig.update_layout(xaxis_rangeslider_visible=False,
-                  paper_bgcolor='rgba(0,0,0,0)',
-                  plot_bgcolor='rgba(0,0,0,0)',
-                  margin=dict(l=0, r=0, t=0, b=0))
- 
-  graphJSON = json.dumps(f8t, cls=plotly.utils.PlotlyJSONEncoder)
-  return graphJSON  
-
-
 
   #row_heights=[0.6, 0.2, 0.2], # относительная высота строк Subplot
   # Set y-axes titles
