@@ -5,7 +5,10 @@
 {% block chart %}
 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
   {% for interval in intervals %}
-    <button type="button" id="test" class="btn btn-outline-info">{{interval}}{{time}}</button>
+    <button type="button" id="test" class="btn btn-outline-info">{{interval}}</button>
+  {% endfor %}
+  {% for time in times %}
+    <button type="button" id="test" class="btn btn-outline-success">{{time}}</button>
   {% endfor %}
 </div>
 <div class="chart" id='candle_chart'></div>
@@ -30,18 +33,32 @@
   const symbol = urlParams.get('symbol')
 
   // Update chart when change interval
-  const button = document.querySelector('#test');
+  // const button = document.querySelector('#test');
   document.querySelectorAll('.btn-outline-info').forEach(item => {
     item.addEventListener('click', (e) => {
       e.preventDefault;
       const interval = item.innerHTML;
-      $.post('/dashboard', {
+      $.post('/candles', {
         symbol,
-        interval,
+        interval
+      }).done((response) => {
+        const candleChart = JSON.parse(response);
+        Plotly.react('candle_chart', candleChart, {});
+      }).fail(() => {
+        console.log("{{ ('Error: Could not contact server.') }}");
+      });
+    });
+  });
+  document.querySelectorAll('.btn-outline-success').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault;
+      const time = item.innerHTML;
+      $.post('/trades', {
+        symbol,
         time
       }).done((response) => {
-        const candle_chart = JSON.parse(response);
-        Plotly.react('candle_chart', candleChart, {});
+        const tradeChart = JSON.parse(response);
+        Plotly.react('trade_chart', tradeChart, {});
       }).fail(() => {
         console.log("{{ ('Error: Could not contact server.') }}");
       });

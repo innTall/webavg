@@ -48,7 +48,7 @@ def get_candles(candles, unit=15):
   min_can = min(frame4c['low'])
   max_can = max(frame4c['high'])
   avr_can = round(sum((frame4c['market']) / sum(frame4c['active'])), 8)
-  buy_ticks = int((last_price - min_can) * unit // (max_can - min_can))
+  buy_ticks = int((last_price - min_can) * unit / (max_can - min_can))
   if buy_ticks < 2: buy_ticks = 2
   if buy_ticks > 13: buy_ticks = 13
   sell_ticks = unit - buy_ticks
@@ -139,7 +139,7 @@ def get_trades(trades, unit=15, period=15):
   min_tr = min(frame8t['price'])
   max_tr = max(frame8t['price'])
   avr_tr = round(sum((np.abs(frame8t['market'])) / sum(frame8t['active'])), 8)
-  buy_ticks = int((last_price - min_tr) * unit // (max_tr - min_tr))
+  buy_ticks = int((last_price - min_tr) * unit / (max_tr - min_tr))
   if buy_ticks < 2: buy_ticks = 2
   if buy_ticks > 13: buy_ticks = 13
   sell_ticks = unit - buy_ticks
