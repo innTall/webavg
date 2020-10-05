@@ -3,14 +3,20 @@
 <title>{% block title %}Dashboard{% endblock %}</title>
 
 {% block chart %}
-<div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+<div class='btn-group btn-group-sm' role='group' aria-label='Basic example'>
   {% for interval in intervals %}
-    <button type="button" id="test" class="btn btn-outline-info">{{interval}}{{time}}</button>
+    <button type='button' id='test' class='btn btn-outline-info'>{{interval}}{{time}}</button>
   {% endfor %}
 </div>
-<div class="chart" id='candle_chart'></div>
-<div class="chart" id='trade_chart'></div>
-<div class="chart" id='small_chart'></div>
+<div class='chart' id='candle_chart'></div>
+<div class='chart' id='trade_chart'></div>
+<div class='chart' id='small_chart'></div>
+<table class='table table-borderless table-sm' id='table_time'></table>
+  <thead class="thead-dark"></thead>
+<table class='table table-borderless table-sm' id='table_price'></table>
+  <thead class="thead-dark"></thead>
+<table class='table table-borderless table-sm' id='table_order'></table>
+  <thead class="thead-dark"></thead>
 {% endblock %}
 {% block scripts %}
 <script>
@@ -23,7 +29,16 @@
 
   const trad = {{trade_chart | safe}}    
   Plotly.plot('trade_chart', trad, {});
-    
+  
+  const ttim = {{table_time | safe}}    
+  Plotly.table('table_time', ttim, {});
+
+  const tpri = {{table_price | safe}}    
+  Plotly.table('table_price', tpri, {});
+
+  const tord = {{table_order | safe}}    
+  Plotly.table('table_order', tord, {});
+
   // Parse url
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);

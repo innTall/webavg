@@ -36,11 +36,11 @@ def get_candles(candles, unit=15):
   frame3c['high'] = pd.to_numeric(frame3c['high'])
   frame3c['close'] = pd.to_numeric(frame3c['close'])
   frame4c = df(frame3c, columns=['date', 'price', 'open', 'high', 'low',
-               'close', 'active', 'market', 'buy', 'sell', '%', 'ao', 'rsi'])
+               'close', 'active', 'market', 'buy', 'sell', 'perc', 'ao', 'rsi'])
   frame4c['price'] = round((frame4c['market'] / frame4c['active']), 8)
   frame4c['sell'] = round((frame4c['market'] - frame4c['buy']), 8)
   frame4c['diff'] = frame4c['buy'] - frame4c['sell']
-  frame4c['%'] = round(((frame4c['buy'] - frame4c['sell']) *100 / frame4c['sell']), 2)
+  frame4c['perc'] = round(((frame4c['buy'] - frame4c['sell']) *100 / frame4c['sell']), 2)
   frame4c['ao'] = ta.momentum.ao(high=frame4c['high'], low=frame4c['low'])
   frame4c['rsi'] = ta.momentum.rsi(close=frame4c['close'])
   total = frame4c.pivot_table(['buy', 'sell', 'market', 'diff'], ['price'], aggfunc='sum')
@@ -60,7 +60,7 @@ def get_candles(candles, unit=15):
   res_sell = list(map(lambda var: var * one_sell / 100, arr_sell)) # расчет вверх
   up_scale = last_price + last_price * np.array(res_sell) # процентная шкала вверх от текущей цены
   down_scale = last_price - last_price * np.array(res_buy) # процентная шкала вниз от текущей цены
-  scale_can = np.hstack((up_scale, down_scale)) # создание массива % значений
+  scale_can = np.hstack((up_scale, down_scale)) # создание массива perc значений
   down = round(((avr_can - min_can) / 3), 8) # 3 зоны вниз от средней
   buy_down = min_can + down # нижняя бай-зона
   sell_down = avr_can - down # нижняя селл-зона
@@ -75,8 +75,8 @@ def get_candles(candles, unit=15):
   vol_msell = round(max(frame4c['sell']), 2)
   vol_bs = max(vol_mbuy, vol_msell) # макс значение объема (бай/селл)
   vol_aver = round(sum(frame4c['market']/2/numstr), 4) # среднее значение бай/селл объемов за период
-  diff_mbuy = max(frame4c['%'])
-  diff_msell = max(np.abs(frame4c['%']))
+  diff_mbuy = max(frame4c['perc'])
+  diff_msell = max(np.abs(frame4c['perc']))
   diff_bs = max(diff_mbuy, diff_msell)
   return (frame4c, total, last_price, min_can, max_can, avr_can, scale_can, buy_down, sell_down,
   buy_up, sell_up, numstr, first_date, last_date, vol_max, vol_mbuy, vol_msell, vol_bs,
@@ -191,6 +191,7 @@ def get_trades(trades, unit=15, period=15):
 #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
 #export_csv = tot2.to_csv (r'C:\Users\Usuario\downloads\tot2.csv', index = True, header=True)
 #export_csv = tot3.to_csv (r'C:\Users\Usuario\downloads\tot3.csv', index = True, header=True)
+#export_csv = f11t.to_csv (r'C:\Users\Usuario\downloads\f11t.csv', index = True, header=True)
 #print(f'lp={lp}, mit={mit}, mat={mat}, avt={avt}, scat={scat}, buyd={buyd}, selld={selld},\
 #buyu={buyu}, sellu={sellu}, fd={fd}, ld={ld}, avb={avb}, mab={mab}, avs={avs},\
 #mas={mas}, absma={absma}, miav={miav}, vav={vav}, a15={a15}')

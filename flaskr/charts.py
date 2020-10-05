@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask import Flask, jsonify
 import numpy as np
 import pandas as pd
 from pandas import DataFrame as df
@@ -30,7 +31,7 @@ fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
   y4 = gc['close']
   y5 = gc['buy']
   y6 = gc['sell']
-  y7 = gc['%']
+  y7 = gc['perc']
   y8 = gc['ao'] #gc['ao'] = ta.utils.dropna(gc['ao'])
   y9 = gc['rsi'] #gc['rsi'] = ta.utils.dropna(gc['rsi'])
     
@@ -156,8 +157,8 @@ fd, ld, avb, mab, avs, mas, absma, miav, vav, a15):
   fig.update_layout(xaxis_rangeslider_visible=False,
                   paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
-                  margin=dict(l=0, r=0, t=0, b=0))
- 
+                  margin=dict(l=0, r=0, t=0, b=0)
+  )
   graphJSON = json.dumps(f8t, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
@@ -187,7 +188,53 @@ fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
   graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
+def timec(gc):
+
+  gc = go.Figure(go.Table(
+    header=dict(values=list(gc.columns),
+                fill_color='DodgerBlue',
+                align='left'),
+    cells=dict(values=[gc.date, gc.price, gc.buy, gc.sell, gc.perc],
+               fill_color='Gainsboro',
+               align='left'))
+  )
+  json = gc.to_json() 
+  return json 
+  
+def pricec(f8t):
+
+  f8t = go.Figure(go.Table(
+    header=dict(values=list(f8t.columns),
+                fill_color='DodgerBlue',
+                align='left'),
+    cells=dict(values=[f8t.price, f8t.buy, f8t.sell],
+               fill_color='Gainsboro',
+               align='left'))
+  )
+  json = f8t.to_json() 
+  return json 
+
+def ordert(f11t):
+
+  f11t = go.Figure(go.Table(
+    header=dict(values=list(f11t.columns),
+                fill_color='DodgerBlue',
+                align='left'),
+    cells=dict(values=[f11t.date, f11t.price, f11t.buy, f11t.sell],
+               fill_color='Gainsboro',
+               align='left'))
+  )
+  json = f11t.to_json() 
+  return json
+  
 '''
+  json_table = gc.to_json(orient = 'table')
+  return json_table
+  
+  ["data"],
+                   columns=[{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]])
+
+
   gc = fig.add_trace(go.Bar(x=y0, y=x0, name='volprice', orientation='h',
                       marker = dict(
                         line = dict(width = 1, color = '#6A5ACD')
