@@ -10,9 +10,9 @@ from plotly.subplots import make_subplots
 import ta
 import json
 
-def candlestick_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,
-fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
 
+def candlestick_chart(var_can):
+  gc = var_can[0]
   fig = make_subplots(rows=4, cols=1,
     shared_xaxes=True, # связывание осей x
     vertical_spacing=0.02, # интервал по вертикали
@@ -162,8 +162,7 @@ fd, ld, avb, mab, avs, mas, absma, miav, vav, a15):
   graphJSON = json.dumps(f8t, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
-def simple_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,
-fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs):
+def simple_chart(var_can):
 
   x = gc['date']
   y1 = gc['open']
@@ -228,6 +227,10 @@ def ordert(f11t):
   return json
   
 '''
+  var_can = gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,
+  fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs
+  
+  
   json_table = gc.to_json(orient = 'table')
   return json_table
   

@@ -3,15 +3,15 @@ import pandas as pd
 from datetime import datetime
 from pandas import DataFrame as df
 import ta
-from binance.client import Client
+#from binance.client import Client
 
 pd.set_option('precision', 8)
 
-client = Client()
-name = 'ZENBNB'
+#client = Client()
+#name = 'ZENBNB'
 
-candles = client.get_klines(symbol=name, interval=Client.KLINE_INTERVAL_4HOUR)
-trades = client.aggregate_trade_iter(symbol=name, start_str='2 days ago UTC')
+#candles = client.get_klines(symbol=name, interval=Client.KLINE_INTERVAL_4HOUR)
+#trades = client.aggregate_trade_iter(symbol=name, start_str='2 days ago UTC')
 
 def get_candles(candles, y_ticks=15):
   frame1c = df(candles)
@@ -79,16 +79,15 @@ def get_candles(candles, y_ticks=15):
   perc_max_sell = max(np.abs(frame2c['perc']))
   perc_buysell_sell = max(perc_max_buy, perc_max_sell)
   
-  return (frame2c, total, last_price, min_price, max_price, aver_price, scale_percent, buy_down,
+  return [frame2c, total, last_price, min_price, max_price, aver_price, scale_percent, buy_down,
   sell_down, buy_up, sell_up, amount, first_time, last_time, max_volume, max_buy_vol,
-  max_sell_vol, max_buysell_vol, aver_volume, perc_max_buy, perc_max_sell, perc_buysell_sell)
+  max_sell_vol, max_buysell_vol, aver_volume, perc_max_buy, perc_max_sell, perc_buysell_sell]
 
-(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb, vms,
-  vbs, vav, dmb, dms, dbs) = get_candles(candles, y_ticks=15)
+  [gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb, vms,
+  vbs, vav, dmb, dms, dbs] = get_candles(candles, y_ticks=15)
   #export_csv = gc.to_csv (r"C:\Users\Usuario\downloads\gc1.csv", index = True, header=True)
-var_can = (gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb, vms,
-  vbs, vav, dmb, dms, dbs)
-print(var_can)
+  # = var_can
+#print(var_can)
 
 def get_trades(trades, y_ticks=15, period=15):
   agg_trade_list = list(trades)
@@ -178,9 +177,9 @@ def get_trades(trades, y_ticks=15, period=15):
   buy_down, sell_down, buy_up, sell_up, first_time, last_time, aver_buy15_order, max_buy_order,
   aver_sell15_order, max_sell_order, max_buysell_order, min_aver_buysell, aver_volume, aver_15m_vol)
   
-(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
+  (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
   avs, mas, absma, miav, vav, a15) = get_trades(trades, y_ticks=15, period=15)
   #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
-var_trad = (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
+  var_trad = (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
   avs, mas, absma, miav, vav, a15)
-print(var_trad)
+#print(var_trad)

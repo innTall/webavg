@@ -28,40 +28,30 @@ def get_dashboard():
     interval = request.form['interval']
     time = request.form['time']
     candles = client.get_klines(symbol=symbol, interval=interval)
-    (gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb,
-    vms, vbs, vav, dmb, dms, dbs) = get_candles(candles, unit=15)
-    candle_chart = candlestick_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu,
-    sellu, nums, fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs)
-    small_chart = simple_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu,
-    sellu, nums, fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs)
+    var_can = get_candles(candles, y_ticks=15)
+    candle_chart = candlestick_chart(var_can)
+    small_chart = simple_chart(var_can)
     trades = client.aggregate_trade_iter(symbol=symbol, start_str=time)
-    (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb,
-    mab, avs, mas, absma, miav, vav, a15) = get_trades(trades, unit=15, period=15)
-    trade_chart = order_chart(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld,
-    buyu, sellu, fd, ld, avb, mab, avs, mas, absma, miav, vav, a15)
-    table_time = timec(gc)
-    table_price = pricec(f8t)
-    table_order = ordert(f11t)
+    var_trad = get_trades(trades, y_ticks=15, period=15)
+    trade_chart = order_chart(var_trad)
+    table_time = timec(var_can(0))
+    table_price = pricec(var_trad(1))
+    table_order = ordert(var_trad(2))
     return candle_chart
   else:
     symbol = request.args['symbol']
     interval = '1d'
     time = '2 days ago UTC'
     candles = client.get_klines(symbol=symbol, interval=interval)
-    (gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb,
-    vms, vbs, vav, dmb, dms, dbs) = get_candles(candles, unit=15)
-    candle_chart = candlestick_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu,
-    sellu, nums, fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs)
-    small_chart = simple_chart(gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu,
-    sellu, nums, fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs)
+    var_can = get_candles(candles, y_ticks=15)
+    candle_chart = candlestick_chart(var_can)
+    small_chart = simple_chart(var_can)
     trades = client.aggregate_trade_iter(symbol=symbol, start_str=time)
-    (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb,
-    mab, avs, mas, absma, miav, vav, a15) = get_trades(trades, unit=15, period=15)
-    trade_chart = order_chart(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld,
-    buyu, sellu, fd, ld, avb, mab, avs, mas, absma, miav, vav, a15)
-    table_time = timec(gc)
-    table_price = pricec(f8t)
-    table_order = ordert(f11t)
+    var_trad = get_trades(trades, y_ticks=15, period=15)
+    trade_chart = order_chart(var_trad)
+    table_time = timec(var_can(0))
+    table_price = pricec(var_trad(1))
+    table_order = ordert(var_trad(2))
     return render_template('dashboard.html', candle_chart=candle_chart, intervals=intervals,
                       trade_chart=trade_chart, times=times, small_chart=small_chart,
                       table_time=table_time, table_price=table_price, table_order=table_order)
