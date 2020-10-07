@@ -3,9 +3,9 @@ import pandas as pd
 from datetime import datetime
 from pandas import DataFrame as df
 import ta
-#from binance.client import Client
+from binance.client import Client
 
-pd.set_option('precision', 8)
+#pd.set_option('precision', 8)
 
 #client = Client()
 #name = 'ZENBNB'
@@ -173,13 +173,13 @@ def get_trades(trades, y_ticks=15, period=15):
   frame10t = df(frame9t, columns=['date', 'price', 'market', 'buy', 'sell', 'order'])
   total2 = frame10t.pivot_table(['price', 'buy', 'sell'], ['date'], aggfunc='sum')
   
-  return (total, frame8t, frame10t, total2, last_price, min_price, max_price, aver_price, scale_percent,
+  return [total, frame8t, frame10t, total2, last_price, min_price, max_price, aver_price, scale_percent,
   buy_down, sell_down, buy_up, sell_up, first_time, last_time, aver_buy15_order, max_buy_order,
-  aver_sell15_order, max_sell_order, max_buysell_order, min_aver_buysell, aver_volume, aver_15m_vol)
-  
-  (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
-  avs, mas, absma, miav, vav, a15) = get_trades(trades, y_ticks=15, period=15)
+  aver_sell15_order, max_sell_order, max_buysell_order, min_aver_buysell, aver_volume, aver_15m_vol]
+
+  [tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
+  avs, mas, absma, miav, vav, a15] = get_trades(trades, y_ticks=15, period=15)
   #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
-  var_trad = (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
-  avs, mas, absma, miav, vav, a15)
-#print(var_trad)
+  #var_trad = (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
+  #avs, mas, absma, miav, vav, a15)
+  #print(avs, mas, absma, miav, vav, a15)

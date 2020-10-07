@@ -10,9 +10,17 @@ from plotly.subplots import make_subplots
 import ta
 import json
 
-
 def candlestick_chart(var_can):
   gc = var_can[0]
+  fd = var_can[12]
+  ld = var_can[13]
+  avc = var_can[5]
+  mic = var_can[3]
+  mac = var_can[4]
+  buyd = var_can[7]
+  selld = var_can[8]
+  buyu = var_can[9]
+  sellu = var_can[10]
   fig = make_subplots(rows=4, cols=1,
     shared_xaxes=True, # связывание осей x
     vertical_spacing=0.02, # интервал по вертикали
@@ -72,7 +80,7 @@ def candlestick_chart(var_can):
                         line = dict(width = 1, color = '#FF0000')
                       ), row=4, col=1, secondary_y=True
   )
-            
+              
   fig.update_layout(xaxis_rangeslider_visible=False,   #line_width=0.6
                   paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
@@ -119,9 +127,8 @@ def candlestick_chart(var_can):
   graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
-def order_chart(tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu,
-fd, ld, avb, mab, avs, mas, absma, miav, vav, a15):
-
+def order_chart(var_trad):
+  f8t = var_trad[1]
   fig = make_subplots(rows=3, cols=1,
     shared_xaxes=True, # связывание осей x
     vertical_spacing=0.02, # интервал по вертикали
@@ -163,7 +170,7 @@ fd, ld, avb, mab, avs, mas, absma, miav, vav, a15):
   return graphJSON
 
 def simple_chart(var_can):
-
+  gc = var_can[0]
   x = gc['date']
   y1 = gc['open']
   y2 = gc['high']
@@ -186,7 +193,7 @@ def simple_chart(var_can):
   )
   graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
-
+'''
 def timec(gc):
 
   gc = go.Figure(go.Table(
@@ -226,11 +233,12 @@ def ordert(f11t):
   json = f11t.to_json() 
   return json
   
-'''
   var_can = gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,
   fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs
   
-  
+  var_trad = tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu,
+  fd, ld, avb, mab, avs, mas, absma, miav, vav, a15
+
   json_table = gc.to_json(orient = 'table')
   return json_table
   

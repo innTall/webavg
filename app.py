@@ -2,14 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from binance.client import Client
 import numpy as np
 import json
-from flaskr.frames import get_candles
-from flaskr.frames import get_trades
-from flaskr.charts import candlestick_chart
-from flaskr.charts import order_chart
-from flaskr.charts import simple_chart
-from flaskr.charts import timec
-from flaskr.charts import pricec
-from flaskr.charts import ordert
+from flaskr.frames import get_candles, get_trades
+from flaskr.charts import candlestick_chart, order_chart, simple_chart
+#from flaskr.charts import timec
+#from flaskr.charts import pricec
+#from flaskr.charts import ordert
 
 client = Client()
 
@@ -34,9 +31,6 @@ def get_dashboard():
     trades = client.aggregate_trade_iter(symbol=symbol, start_str=time)
     var_trad = get_trades(trades, y_ticks=15, period=15)
     trade_chart = order_chart(var_trad)
-    table_time = timec(var_can(0))
-    table_price = pricec(var_trad(1))
-    table_order = ordert(var_trad(2))
     return candle_chart
   else:
     symbol = request.args['symbol']
@@ -49,16 +43,16 @@ def get_dashboard():
     trades = client.aggregate_trade_iter(symbol=symbol, start_str=time)
     var_trad = get_trades(trades, y_ticks=15, period=15)
     trade_chart = order_chart(var_trad)
-    table_time = timec(var_can(0))
-    table_price = pricec(var_trad(1))
-    table_order = ordert(var_trad(2))
     return render_template('dashboard.html', candle_chart=candle_chart, intervals=intervals,
-                      trade_chart=trade_chart, times=times, small_chart=small_chart,
-                      table_time=table_time, table_price=table_price, table_order=table_order)
+                      trade_chart=trade_chart, times=times, small_chart=small_chart)
     '''
     jsonfiles = json.loads(df.to_json(orient='records'))
     return render_template('index.html', ctrsuccess=jsonfiles)
     
+    table_time = timec(var_can(0))
+    table_price = pricec(var_trad(1))
+    table_order = ordert(var_trad(2))
+    table_time=table_time, table_price=table_price, table_order=table_order
 
     return jsonify(table_price=json.loads(gc.to_json(orient='values'))['data'],
                   columns=[{'title': str(col)}
