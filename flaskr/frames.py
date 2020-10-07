@@ -3,15 +3,8 @@ import pandas as pd
 from datetime import datetime
 from pandas import DataFrame as df
 import ta
-from binance.client import Client
 
-#pd.set_option('precision', 8)
-
-#client = Client()
-#name = 'ZENBNB'
-
-#candles = client.get_klines(symbol=name, interval=Client.KLINE_INTERVAL_4HOUR)
-#trades = client.aggregate_trade_iter(symbol=name, start_str='2 days ago UTC')
+pd.set_option('precision', 8)
 
 def get_candles(candles, y_ticks=15):
   frame1c = df(candles)
@@ -75,19 +68,19 @@ def get_candles(candles, y_ticks=15):
   max_sell_vol = round(max(frame2c['sell']), 2)
   max_buysell_vol = max(max_buy_vol, max_sell_vol) # макс значение объема (бай/селл)
   aver_volume = round(sum(frame2c['market']/2/amount), 4) # среднее значение бай/селл объемов за период
+  aver_percent = round(sum(frame2c['diff']) * 100 / sum(frame2c['market']), 2)
   perc_max_buy = max(frame2c['perc'])
   perc_max_sell = max(np.abs(frame2c['perc']))
-  perc_buysell_sell = max(perc_max_buy, perc_max_sell)
+  perc_buysell_max = max(perc_max_buy, perc_max_sell)
   
-  return [frame2c, total, last_price, min_price, max_price, aver_price, scale_percent, buy_down,
-  sell_down, buy_up, sell_up, amount, first_time, last_time, max_volume, max_buy_vol,
-  max_sell_vol, max_buysell_vol, aver_volume, perc_max_buy, perc_max_sell, perc_buysell_sell]
+  return [frame2c, total, last_price, min_price, max_price, aver_price, scale_percent,
+  buy_down, sell_down, buy_up, sell_up, amount, first_time, last_time, max_volume,
+  max_buy_vol, max_sell_vol, max_buysell_vol, aver_volume, aver_percent, perc_max_buy,
+  perc_max_sell, perc_buysell_max]
 
-  [gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums, fd, ld, vma, vmb, vms,
-  vbs, vav, dmb, dms, dbs] = get_candles(candles, y_ticks=15)
+  [f2c, pivtab1, lastpc, mic, mac, avc, perscalec, buyd, selld, buyu, sellu, nums, ft, lt,
+  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs] = get_candles(candles, y_ticks=15)
   #export_csv = gc.to_csv (r"C:\Users\Usuario\downloads\gc1.csv", index = True, header=True)
-  # = var_can
-#print(var_can)
 
 def get_trades(trades, y_ticks=15, period=15):
   agg_trade_list = list(trades)
@@ -136,10 +129,10 @@ def get_trades(trades, y_ticks=15, period=15):
   sell_ticks = y_ticks - buy_ticks
   one_tick_buy = round(((last_price - min_price) / last_price) * 100 / (buy_ticks - 1), 2)
   one_tick_sell = round(((max_price - last_price) / last_price) * 100 / (sell_ticks - 1), 2)
-  res_buy = list(map(lambda var: var * one_tick_buy / 100, range(buy_ticks))) # расчет вниз
-  res_sell = list(map(lambda var: var * one_tick_sell / 100, range(sell_ticks))) # расчет вверх
-  up_scale = last_price + last_price * np.array(res_sell) # процентная шкала вверх от текущей цены
-  down_scale = last_price - last_price * np.array(res_buy) # процентная шкала вниз от текущей цены
+  res_buy = list(map(lambda var: var * one_tick_buy / 100, range(buy_ticks)))
+  res_sell = list(map(lambda var: var * one_tick_sell / 100, range(sell_ticks)))
+  up_scale = last_price + last_price * np.array(res_sell)
+  down_scale = last_price - last_price * np.array(res_buy)
   scale_percent = np.hstack((up_scale, down_scale)) # создание массива perc значений
   # уровни сопр/подд от средней цены
   downzone = round(((aver_price - min_price) / 3), 8) # 3 зоны вниз от средней
@@ -177,9 +170,13 @@ def get_trades(trades, y_ticks=15, period=15):
   buy_down, sell_down, buy_up, sell_up, first_time, last_time, aver_buy15_order, max_buy_order,
   aver_sell15_order, max_sell_order, max_buysell_order, min_aver_buysell, aver_volume, aver_15m_vol]
 
-  [tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
-  avs, mas, absma, miav, vav, a15] = get_trades(trades, y_ticks=15, period=15)
+  [pivtab, f8t, f10t, pivtab2, lastpt, minpr, maxpr, averpr, percscat, buyd, selld, buyu,
+  sellu, firstt, last, aver15b, maxb, aver15s, maxs, maxbs, minaver, volaver,
+  aver15] = get_trades(trades, y_ticks=15, period=15)
   #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
-  #var_trad = (tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu, fd, ld, avb, mab,
-  #avs, mas, absma, miav, vav, a15)
-  #print(avs, mas, absma, miav, vav, a15)
+  
+  #from binance.client import Client
+  #client = Client()
+  #name = 'ZENBNB'
+  #candles = client.get_klines(symbol=name, interval=Client.KLINE_INTERVAL_4HOUR)
+  #trades = client.aggregate_trade_iter(symbol=name, start_str='2 days ago UTC')

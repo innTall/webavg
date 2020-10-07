@@ -11,17 +11,18 @@ import ta
 import json
 
 def candlestick_chart(variables_candles):
-  gc = variables_candles[0]
-  fd = variables_candles[12]
-  ld = variables_candles[13]
-  avc = variables_candles[5]
+  f2c = variables_candles[0]
   mic = variables_candles[3]
   mac = variables_candles[4]
+  avc = variables_candles[5]
   buyd = variables_candles[7]
   selld = variables_candles[8]
   buyu = variables_candles[9]
   sellu = variables_candles[10]
-  
+  ft = variables_candles[12]
+  lt = variables_candles[13]
+  averperc = variables_candles[19]
+
   fig = make_subplots(rows=4, cols=1,
     shared_xaxes=True, # связывание осей x
     vertical_spacing=0.02, # интервал по вертикали
@@ -33,18 +34,18 @@ def candlestick_chart(variables_candles):
     ]
   )
   
-  x = gc['date']
-  y1 = gc['open']
-  y2 = gc['high']
-  y3 = gc['low']
-  y4 = gc['close']
-  y5 = gc['buy']
-  y6 = gc['sell']
-  y7 = gc['perc']
-  y8 = gc['ao'] #gc['ao'] = ta.utils.dropna(gc['ao'])
-  y9 = gc['rsi'] #gc['rsi'] = ta.utils.dropna(gc['rsi'])
+  x = f2c['date']
+  y1 = f2c['open']
+  y2 = f2c['high']
+  y3 = f2c['low']
+  y4 = f2c['close']
+  y5 = f2c['buy']
+  y6 = f2c['sell']
+  y7 = f2c['perc']
+  y8 = f2c['ao'] #f2c['ao'] = ta.utils.dropna(f2c['ao'])
+  y9 = f2c['rsi'] #f2c['rsi'] = ta.utils.dropna(f2c['rsi'])
     
-  gc = fig.add_trace(
+  f2c = fig.add_trace(
     go.Candlestick(x=x, open=y1, high=y2, low=y3, close=y4, name='candles',
                   line = dict(width=1),
                   increasing = dict(
@@ -55,56 +56,57 @@ def candlestick_chart(variables_candles):
                   )), row=1, col=1
   )
   
-  gc = fig.add_trace(go.Line(x=x, y=y5, name='volbuy',
+  f2c = fig.add_trace(go.Line(x=x, y=y5, name='volbuy',
                         line = dict(width = 1, color = '#006400')
                         ), row=3, col=1, secondary_y=False
   )
              
-  gc = fig.add_trace(go.Line(x=x, y=y6, name='volsell',
+  f2c = fig.add_trace(go.Line(x=x, y=y6, name='volsell',
                         line = dict(width = 1, color = '#FF0000')
                         ), row=3, col=1, secondary_y=False
   )
           
-  gc = fig.add_trace(go.Bar(x=x, y=y7, name='delta%',
+  f2c = fig.add_trace(go.Bar(x=x, y=y7, name='volperc',
                       marker = dict(
-                        line = dict(width = 1, color = '#6A5ACD')
+                        line = dict(width = 1,
+                        color=np.where(y7 > 0, '#1E90FF', '#FF00FF').tolist())
                       )), row=3, col=1, secondary_y=True
   )
   
-  gc = fig.add_trace(go.Bar(x=x, y=y8, name='ao',
+  f2c = fig.add_trace(go.Bar(x=x, y=y8, name='ao',
                       marker = dict(
                         line=dict(width = 0.8, color = '#228B22')
                       )), row=4, col=1, secondary_y=False
   )
 
-  gc = fig.add_trace(go.Line(x=x, y=y9, name='rsi',
-                        line = dict(width = 1, color = '#FF0000')
-                      ), row=4, col=1, secondary_y=True
+  f2c = fig.add_trace(go.Line(x=x, y=y9, name='rsi',
+                        line = dict(width = 0.8, color = '#FF0000')
+                        ), row=4, col=1, secondary_y=True
   )
               
   fig.update_layout(xaxis_rangeslider_visible=False,   #line_width=0.6
                   paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
                   shapes=[dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=fd, y0=avc, x1=ld, y1=avc, line_color = '#A9A9A9',
+                          x0=ft, y0=avc, x1=lt, y1=avc, line_color = '#A9A9A9',
                           line = dict(dash='solid')),
                         dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=fd, y0=mic, x1=ld, y1=mic, line_color = '#A9A9A9',
+                          x0=ft, y0=mic, x1=lt, y1=mic, line_color = '#A9A9A9',
                           line = dict(dash='dot')),
                         dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=fd, y0=buyd, x1=ld, y1=buyd, line_color = '#A9A9A9',
+                          x0=ft, y0=buyd, x1=lt, y1=buyd, line_color = '#A9A9A9',
                           line = dict(dash='dot')),
                         dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=fd, y0=selld, x1=ld, y1=selld, line_color = '#A9A9A9',
+                          x0=ft, y0=selld, x1=lt, y1=selld, line_color = '#A9A9A9',
                           line = dict(dash='dot')),
                         dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=fd, y0=buyu, x1=ld, y1=buyu, line_color = '#A9A9A9',
+                          x0=ft, y0=buyu, x1=lt, y1=buyu, line_color = '#A9A9A9',
                           line = dict(dash='dot')),
                         dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=fd, y0=sellu, x1=ld, y1=sellu, line_color = '#A9A9A9',
+                          x0=ft, y0=sellu, x1=lt, y1=sellu, line_color = '#A9A9A9',
                           line = dict(dash='dot')),
                         dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=fd, y0=mac, x1=ld, y1=mac, line_color = '#A9A9A9',
+                          x0=ft, y0=mac, x1=lt, y1=mac, line_color = '#A9A9A9',
                           line = dict(dash='dot'))],
                   xaxis = dict(
                     showgrid = False,
@@ -125,7 +127,7 @@ def candlestick_chart(variables_candles):
                   ), margin=dict(l=0, r=0, t=0, b=0)
   )
  
-  graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
 def order_chart(variables_trades):
@@ -171,14 +173,24 @@ def order_chart(variables_trades):
   return graphJSON
 
 def simple_chart(variables_candles):
-  gc = variables_candles[0]
-  x = gc['date']
-  y1 = gc['open']
-  y2 = gc['high']
-  y3 = gc['low']
-  y4 = gc['close']
+  f2c = variables_candles[0]
+  mic = variables_candles[3]
+  mac = variables_candles[4]
+  avc = variables_candles[5]
+  buyd = variables_candles[7]
+  selld = variables_candles[8]
+  buyu = variables_candles[9]
+  sellu = variables_candles[10]
+  ft = variables_candles[12]
+  lt = variables_candles[13]
   
-  gc = go.Figure(go.Candlestick(
+  x = f2c['date']
+  y1 = f2c['open']
+  y2 = f2c['high']
+  y3 = f2c['low']
+  y4 = f2c['close']
+  
+  f2c = go.Figure(go.Candlestick(
                   x = x, open = y1, high = y2, low = y3, close = y4, name = 'btc',
                   line = dict(width=1),
                   increasing = dict(
@@ -190,12 +202,43 @@ def simple_chart(variables_candles):
                   layout = go.Layout(xaxis_rangeslider_visible=False,
                   paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
+                  shapes=[dict(type='line', xref='x1', yref='y1', line_width=0.8,
+                          x0=ft, y0=avc, x1=lt, y1=avc, line_color = '#A9A9A9',
+                          line = dict(dash='solid')),
+                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
+                          x0=ft, y0=mic, x1=lt, y1=mic, line_color = '#A9A9A9',
+                          line = dict(dash='dot')),
+                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
+                          x0=ft, y0=buyd, x1=lt, y1=buyd, line_color = '#A9A9A9',
+                          line = dict(dash='dot')),
+                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
+                          x0=ft, y0=selld, x1=lt, y1=selld, line_color = '#A9A9A9',
+                          line = dict(dash='dot')),
+                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
+                          x0=ft, y0=buyu, x1=lt, y1=buyu, line_color = '#A9A9A9',
+                          line = dict(dash='dot')),
+                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
+                          x0=ft, y0=sellu, x1=lt, y1=sellu, line_color = '#A9A9A9',
+                          line = dict(dash='dot')),
+                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
+                          x0=ft, y0=mac, x1=lt, y1=mac, line_color = '#A9A9A9',
+                          line = dict(dash='dot'))],
                   margin=dict(l=0, r=0, t=0, b=0))
   )
-  graphJSON = json.dumps(gc, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 '''
 def timec(gc):
+
+                      dict(type='line', xref='x1', yref='y7', name='volperc', line_width=0.8,
+                          x0=ft, y0=averperc, x1=lt, y1=averperc, line_color='#0000CD',
+                          line = dict(dash='dot')),
+                        dict(type='line', xref='x', yref='y9', name='rsi', line_width=0.8,
+                          x0=ft, y0=30, x1=lt, y1=30, line_color='#0000CD',
+                          line = dict(dash='dot')),
+                        dict(type='line', xref='x', yref='y9', name='rsi', line_width=0.8,
+                          x0=ft, y0=70, x1=lt, y1=70, line_color='#0000CD',
+                          line = dict(dash='dot'))],
 
   gc = go.Figure(go.Table(
     header=dict(values=list(gc.columns),
@@ -234,6 +277,9 @@ def ordert(f11t):
   json = f11t.to_json() 
   return json
   
+  f2c, mic, mac, avc, buyd, selld, buyu, sellu, ft, lt = variables_candles[
+    0, 3, 4, 5, 7, 8, 9, 10, 12, 13]
+
   variables_candles = gc, piv, lpc, mic, mac, avc, scac, buyd, selld, buyu, sellu, nums,
   fd, ld, vma, vmb, vms, vbs, vav, dmb, dms, dbs
   
@@ -252,14 +298,6 @@ def ordert(f11t):
                         line = dict(width = 1, color = '#6A5ACD')
                       )), row=1, col=1, #secondary_x=True
   )
-
-   #dict(type='line', xref='x4', yref='y4', name='rsi', line_width=0.8,
-                          #x0=fd, y0=30, x1=ld, y1=30, line_color='#A9A9A9',
-                          #line = dict(dash='dot')),
-                        #dict(type='line', xref='x4', yref='y4', name='rsi', line_width=0.8,
-                          #x0=fd, y0=70, x1=ld, y1=70, line_color='#A9A9A9',
-                          #line = dict(dash='dot'))],
-
   #row_heights=[0.6, 0.2, 0.2], # относительная высота строк Subplot
   # Set y-axes titles
   #fig.update_yaxes(title_text="<b>primary</b> yaxis title", secondary_y=False)
