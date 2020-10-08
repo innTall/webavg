@@ -21,12 +21,12 @@ def get_candles(candles, y_ticks=15):
   frame1c['low'] = pd.to_numeric(frame1c['low'])
   frame1c['close'] = pd.to_numeric(frame1c['close'])
   frame1c['active'] = pd.to_numeric(frame1c['active'])
-  frame1c['market'] = pd.to_numeric(frame1c['market'])
-  frame1c['buy'] = pd.to_numeric(frame1c['buy'])
+  frame1c['market'] = round(pd.to_numeric(frame1c['market']), 4)
+  frame1c['buy'] = round(pd.to_numeric(frame1c['buy']), 4)
   frame2c = df(frame1c, columns=['date', 'price', 'open', 'high', 'low',
                'close', 'active', 'market', 'buy', 'sell', 'perc', 'ao', 'rsi'])
   frame2c['price'] = round((frame2c['market'] / frame2c['active']), 8)
-  frame2c['sell'] = round((frame2c['market'] - frame2c['buy']), 8)
+  frame2c['sell'] = round((frame2c['market'] - frame2c['buy']), 4)
   frame2c['diff'] = frame2c['buy'] - frame2c['sell']
   frame2c['ao'] = ta.momentum.ao(high=frame2c['high'], low=frame2c['low'])
   frame2c['rsi'] = ta.momentum.rsi(close=frame2c['close'])
@@ -97,7 +97,7 @@ def get_trades(trades, y_ticks=15, period=15):
 
   frame2t = df(frame1t, columns=['date', 'price', 'active', 'maker', 'market', 'buy', 'sell'])
   frame2t['maker'].replace([1, 0], [1, -1], inplace=True)
-  frame2t['market'] = frame2t['price'] * (frame2t['active'] * frame2t['maker'])
+  frame2t['market'] = round(frame2t['price'] * (frame2t['active'] * frame2t['maker']), 4)
   frame2t['buy'] = np.array(frame2t['market'])
   frame2t['sell'] = np.array(frame2t['market'])
   
@@ -149,17 +149,17 @@ def get_trades(trades, y_ticks=15, period=15):
   sum_15m = round(diff_minutes / period, 2) # количество 15-мин периодов
   # расчет основных параметров данных по объемам ордеров
   frame7t['buy'] = frame7t['buy'].fillna(0)
-  sum_buy_order = round(sum(frame7t['buy']), 8) # сумма бай-ордеров за период
-  aver_buy15_order = round(sum(frame7t['buy']) / sum_15m, 8) # средний размер бай-ордера за 15 мин
-  max_buy_order = round(max(frame7t['buy']), 8) # макс размер бай-ордера
+  sum_buy_order = round(sum(frame7t['buy']), 4) # сумма бай-ордеров за период
+  aver_buy15_order = round(sum(frame7t['buy']) / sum_15m, 4) # средний размер бай-ордера за 15 мин
+  max_buy_order = round(max(frame7t['buy']), 4) # макс размер бай-ордера
   frame7t['sell'] = frame7t['sell'].fillna(0)
-  sum_sell_order = round(sum(frame7t['sell']), 8) # сумма селл-ордеров за период
-  aver_sell15_order = round(sum(frame7t['sell']) / sum_15m, 8) # средний размер селл-ордера за 15 мин
-  max_sell_order = round(max(frame7t['sell']), 8) # макс размер селл-ордера
+  sum_sell_order = round(sum(frame7t['sell']), 4) # сумма селл-ордеров за период
+  aver_sell15_order = round(sum(frame7t['sell']) / sum_15m, 4) # средний размер селл-ордера за 15 мин
+  max_sell_order = round(max(frame7t['sell']), 4) # макс размер селл-ордера
   max_buysell_order = max(max_buy_order, max_sell_order) # абсолютный макс ордера (бай/селл)
   min_aver_buysell = min(aver_buy15_order, aver_sell15_order) # средний мин ордер (бай/селл) за 15 мин
   aver_volume = (sum_buy_order + sum_sell_order) / 2 # среднее ордеров по объемам (бай/селл)
-  aver_15m_vol = round((aver_buy15_order + aver_sell15_order) / 2, 8) # средний по 15мин (бай/селл)
+  aver_15m_vol = round((aver_buy15_order + aver_sell15_order) / 2, 4) # средний по 15мин (бай/селл)
   # последние таблицы по объемам
   frame8t = df(frame7t, columns=['date', 'price', 'market', 'buy', 'sell', 'order']) # почти финальная таблица
   frame9t = frame8t[frame8t['market'] > aver_15m_vol] # выбор всех ордеров больше значения 15 мин
