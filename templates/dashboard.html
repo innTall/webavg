@@ -14,6 +14,9 @@
 <div class='chart' id='candle_chart'></div>
 <div class='chart' id='trade_chart'></div>
 <div class='chart' id='small_chart'></div>
+<table class='table table-borderless table-sm' id='table_time'></table>
+<table class='table table-borderless table-sm' id='table_price'></table>
+<table class='table table-borderless table-sm' id='table_order'></table>
 {% endblock %}
 {% block scripts %}
 <script>
@@ -26,6 +29,15 @@
 
   const trad = {{trade_chart | safe}}    
   Plotly.plot('trade_chart', trad, {});
+
+  const ttime = {{table_time | safe}}    
+  Plotly.plot('table_time', ttime, {});
+
+  const tprice = {{table_price | safe}}    
+  Plotly.plot('table_price', tprice, {});
+
+  const torder = {{table_order | safe}}    
+  Plotly.plot('table_order', torder, {});
   
   // Parse url
   const queryString = window.location.search;

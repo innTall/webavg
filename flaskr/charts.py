@@ -227,6 +227,59 @@ def simple_chart(variables_candles):
   )
   graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
+
+def candles_time(variables_candles):
+  f2c = variables_candles[0]
+  
+  f2c = go.Figure(go.Table(
+    header = dict(values = list(f2c.columns)),
+    cells = dict(
+      values = [
+         f2c.date, 
+         f2c.price, 
+         f2c.buy, 
+         f2c.sell, 
+         f2c.market,]
+    ))
+  )
+  graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
+  return graphJSON
+
+def candles_price(variables_candles):
+  f2c = variables_candles[0]
+  
+  f2c = go.Figure(go.Table(
+    header = dict(values = list(f2c.columns)),
+    cells = dict(
+      values = [
+         f2c.date, 
+         f2c.price, 
+         f2c.buy, 
+         f2c.sell, 
+         f2c.market,]
+    ))
+  )
+  graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
+  return graphJSON
+
+def trades_order(variables_trades):
+  f10t = variables_trades[2]
+  
+  f10t = go.Figure(go.Table(
+    header = dict(values = list(f10t.columns)),
+    cells = dict(
+      values = [
+         f10t.date, 
+         f10t.price, 
+         f10t.market, 
+         f10t.buy, 
+         f10t.sell,]
+    ))
+  )
+  graphJSON = json.dumps(f10t, cls=plotly.utils.PlotlyJSONEncoder)
+  return graphJSON
+
+
 '''
 def timec(gc):
 
@@ -286,7 +339,7 @@ def ordert(f11t):
   variables_trades = tot2, f8t, f11t, tot3, lp, mit, mat, avt, scat, buyd, selld, buyu, sellu,
   fd, ld, avb, mab, avs, mas, absma, miav, vav, a15
 
-  json_table = gc.to_json(orient = 'table')
+  json_table = data.to_json(orient = 'table')
   return json_table
   
   ["data"],
