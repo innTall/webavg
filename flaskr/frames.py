@@ -3,8 +3,15 @@ import pandas as pd
 from datetime import datetime
 from pandas import DataFrame as df
 import ta
+#from binance.client import Client
 
 pd.set_option('precision', 8)
+
+#client = Client()
+#name = 'ZENBNB'
+
+#candles = client.get_klines(symbol=name, interval=Client.KLINE_INTERVAL_4HOUR)
+#trades = client.aggregate_trade_iter(symbol=name, start_str='2 days ago UTC')
 
 def get_candles(candles, y_ticks=15):
   frame1c = df(candles)
@@ -31,9 +38,6 @@ def get_candles(candles, y_ticks=15):
   frame2c['ao'] = ta.momentum.ao(high=frame2c['high'], low=frame2c['low'])
   frame2c['rsi'] = ta.momentum.rsi(close=frame2c['close'])
   frame2c['perc'] = round((frame2c['diff'] *100 / frame2c['market']), 2)
-  frame3c = frame2c
-  frame4c = frame3c.drop(frame3c.columns[[2, 3, 4, 5, 6, 10, 12, 13]], axis=1)
-  frame5c = df(frame4c, columns=['date', 'price', 'buy', 'sell', 'market', 'perc'])
   total = frame2c.pivot_table(['buy', 'sell', 'market', 'diff', 'perc'], ['price'], aggfunc='sum')
   total['perc'] = round((total['diff'] *100 / total['market']), 2)
   total1 = total[['buy', 'sell', 'market', 'diff', 'perc']].copy()
@@ -78,11 +82,11 @@ def get_candles(candles, y_ticks=15):
   return [frame2c, total, last_price, min_price, max_price, aver_price, scale_percent,
   buy_down, sell_down, buy_up, sell_up, amount, first_time, last_time, max_volume,
   max_buy_vol, max_sell_vol, max_buysell_vol, aver_volume, aver_percent, perc_max_buy,
-  perc_max_sell, perc_buysell_max, frame5c]
+  perc_max_sell, perc_buysell_max]
 
   [f2c, pivtab1, lastpc, mic, mac, avc, perscalec, buyd, selld, buyu, sellu, nums, ft, lt,
-  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs, f5c] = get_candles(candles, y_ticks=15)
-  #export_csv = f4c.to_csv (r"C:\Users\Usuario\downloads\f4c.csv", index = True, header=True)
+  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs] = get_candles(candles, y_ticks=15)
+  #export_csv = f5c.to_csv (r"C:\Users\Usuario\downloads\f5c.csv", index = True, header=True)
 
 def get_trades(trades, y_ticks=15, period=15):
   agg_trade_list = list(trades)
