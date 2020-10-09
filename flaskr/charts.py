@@ -243,42 +243,62 @@ def candles_time(variables_candles):
                 fill_color='#FFFFFF',
                 align = ['left', 'center'],
                 font = dict(color = '#696969', size = 10)
-                ))
+                ),
+    domain = dict(x=[0, 0.5], y=[0, 1]))
   )
-
+  f2c.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+                  plot_bgcolor='rgba(0,0,0,0)',
+                  margin=dict(l=0, r=0, t=0, b=0)
+  )
   graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
 def candles_price(variables_candles):
-  f2c = variables_candles[0]
+  pivtab1 = variables_candles[1]
   
-  f2c = go.Figure(go.Table(
-    header = dict(values = list(f2c.columns)),
-    cells = dict(
-      values = [
-         f2c.date, 
-         f2c.price, 
-         f2c.buy, 
-         f2c.sell, 
-         f2c.market,]
-    ))
+  pivtab1 = go.Figure(go.Table(
+    header = dict(values = ['buy', 'sell', 'market', 'price', 'diff'],
+                  line_color='#0000FF',
+                  fill_color='#FFFFFF',
+                  align=['center'],
+                  font=dict(color='#0000FF', size=12)
+                  ),
+    cells = dict(values = [pivtab1.buy, pivtab1.sell, pivtab1.market],
+                line_color='#1E90FF',
+                fill_color='#FFFFFF',
+                align = ['left', 'center'],
+                font = dict(color = '#696969', size = 10)
+                ),
+    domain = dict(x=[0, 0.5], y=[0, 1]))
   )
-  graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
+  pivtab1.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+                  plot_bgcolor='rgba(0,0,0,0)',
+                  margin=dict(l=0, r=0, t=0, b=0)
+  )
+  graphJSON = json.dumps(pivtab1, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
 def trades_order(variables_trades):
   f10t = variables_trades[2]
   
   f10t = go.Figure(go.Table(
-    header = dict(values = list(f10t.columns)),
-    cells = dict(
-      values = [
-         f10t.date, 
-         f10t.price, 
-         f10t.market, 
-         f10t.buy, 
-         f10t.sell,]
-    ))
+    header = dict(values = ['date', 'price', 'buy', 'sell', 'market', 'order'],
+                  line_color='#0000FF',
+                  fill_color='#FFFFFF',
+                  align=['center'],
+                  font=dict(color='#0000FF', size=12)
+                  ),
+    cells = dict(values = [f10t.date, f10t.price, f10t.buy, f10t.sell, f10t.market, f10t.order],
+                line_color='#1E90FF',
+                fill_color='#FFFFFF',
+                align = ['left', 'center'],
+                font = dict(color = '#696969', size = 10)
+                ),
+    domain = dict(x=[0, 0.5], y=[0, 1]))
+  )
+  f10t.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+                  plot_bgcolor='rgba(0,0,0,0)',
+                  margin=dict(l=0, r=0, t=0, b=0)
   )
   graphJSON = json.dumps(f10t, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
