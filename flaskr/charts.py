@@ -220,7 +220,7 @@ def candles_time(variables_candles):
                 align = ['left', 'center'],
                 font = dict(color = '#696969', size = 10)
                 ),
-    domain = dict(x=[0, 0.5], y=[0, 1]))
+    domain = dict(x=[0, 1], y=[0, 1]))
   )
   f2c.update_layout(paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
@@ -245,7 +245,7 @@ def candles_price(variables_candles):
                 align = ['left', 'center'],
                 font = dict(color = '#696969', size = 10)
                 ),
-    domain = dict(x=[0, 0.5], y=[0, 1]))
+    domain = dict(x=[0, 1], y=[0, 1]))
   )
   pivtab1.update_layout(paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
@@ -270,7 +270,7 @@ def trades_order(variables_trades):
                 align = ['left', 'center'],
                 font = dict(color = '#696969', size = 10)
                 ),
-    domain = dict(x=[0, 0.5], y=[0, 1]))
+    domain = dict(x=[0, 1], y=[0, 1]))
   )
   f10t.update_layout(paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
@@ -279,29 +279,34 @@ def trades_order(variables_trades):
   graphJSON = json.dumps(f10t, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
+def dropdown_crypto(crypto_bases):
+  btcf = crypto_bases[1]
+  #btc_dict = [{'symbol': name_btc, 'quoteAsset': name_quote, 'baseAsset': name_base}]
+  #btcf = pd.DataFrame(btc_df)
+  
+  btcf = go.Figure(go.Table(
+    header = dict(values = ['symbol', 'quoteAsset', 'baseAsset'],
+                  line_color='#0000FF',
+                  fill_color='#FFFFFF',
+                  align=['center'],
+                  font=dict(color='#0000FF', size=12)
+                  ),
+    cells = dict(values = ['name_btc', 'name_quote', 'name_base'],
+                line_color='#1E90FF',
+                fill_color='#FFFFFF',
+                align = ['left', 'center'],
+                font = dict(color = '#696969', size = 10)
+                ),
+    domain = dict(x=[0, 1], y=[0, 1]))
+  )
+  btcf.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+                  plot_bgcolor='rgba(0,0,0,0)',
+                  margin=dict(l=0, r=0, t=0, b=0)
+  )
+  graphJSON = json.dumps(btcf, cls=plotly.utils.PlotlyJSONEncoder)
+  return graphJSON
 
 '''
-shapes=[dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=ft, y0=avc, x1=lt, y1=avc, line_color = '#A9A9A9',
-                          line = dict(dash='solid')),
-                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=ft, y0=mic, x1=lt, y1=mic, line_color = '#A9A9A9',
-                          line = dict(dash='dot')),
-                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=ft, y0=buyd, x1=lt, y1=buyd, line_color = '#A9A9A9',
-                          line = dict(dash='dot')),
-                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=ft, y0=selld, x1=lt, y1=selld, line_color = '#A9A9A9',
-                          line = dict(dash='dot')),
-                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=ft, y0=buyu, x1=lt, y1=buyu, line_color = '#A9A9A9',
-                          line = dict(dash='dot')),
-                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=ft, y0=sellu, x1=lt, y1=sellu, line_color = '#A9A9A9',
-                          line = dict(dash='dot')),
-                        dict(type='line', xref='x1', yref='y1', line_width=0.8,
-                          x0=ft, y0=mac, x1=lt, y1=mac, line_color = '#A9A9A9',
-                          line = dict(dash='dot'))],
 
                       dict(type='line', xref='x1', yref='y7', name='volperc', line_width=0.8,
                           x0=ft, y0=averperc, x1=lt, y1=averperc, line_color='#0000CD',

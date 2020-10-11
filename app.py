@@ -3,8 +3,9 @@ from binance.client import Client
 import numpy as np
 import json
 from flaskr.frames import get_candles, get_trades
+from flaskr.crypto import get_crypto
 from flaskr.charts import candlestick_chart, order_chart, simple_chart
-from flaskr.charts import candles_time, candles_price, trades_order
+from flaskr.charts import candles_time, candles_price, trades_order, dropdown_crypto
 
 client = Client()
 
@@ -32,9 +33,13 @@ def get_dashboard():
   variables_trades = get_trades(trades, y_ticks=15, period=15)
   trade_chart = order_chart(variables_trades)
   table_order = trades_order(variables_trades)
+  prices = client.get_all_tickers()
+  crypto_bases = get_crypto(prices)
+  drop_crypto = dropdown_crypto(crypto_bases)
   return render_template('dashboard.html', candle_chart=candle_chart, intervals=intervals,
                       trade_chart=trade_chart, times=times, small_chart=small_chart,
-                      table_time=table_time, table_price=table_price, table_order=table_order)
+                      table_time=table_time, table_price=table_price, table_order=table_order,
+                      drop_crypto=drop_crypto)
 
 @app.route('/candles', methods=['GET', 'POST'])
 def test_candles():
@@ -80,3 +85,10 @@ def test_orderes():
   variables_trades = get_trades(trades, y_ticks=15, period=15)
   table_order = trades_order(variables_trades)
   return table_order
+
+@app.route('/crypto', methods=['GET', 'POST'])
+def test_crypto():
+  prices = client.get_all_tickers()
+  crypto_bases = get_crypto(prices)
+  drop_crypto = dropdown_crypto(crypto_bases)
+  return drop_crypto

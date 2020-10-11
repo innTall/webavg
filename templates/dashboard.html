@@ -13,9 +13,52 @@
 </div>
 <div class='chart' id='candle_chart'></div>
 <div class='chart' id='trade_chart'></div>
-<div class='chart' id='small_chart'></div>
+{% endblock %}
+{% block table %}
 <table class='table table-borderless table-sm' id='table_time'></table>
+{% endblock %}
+{% block center %}
 <table class='table table-borderless table-sm' id='table_price'></table>
+{% endblock %}
+{% block other %}
+<table class='table table-borderless table-sm' id='drop_crypto'></table>
+{% endblock %}
+{% block upright %}
+<div class='chart' id='small_chart'></div>
+<ul class="nav nav-tabs">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/crypto">BTC</a>
+    <div class="dropdown-menu">  
+      {% for symbol in symbols %}
+        <a class="dropdown-item" href="/crypto">{{symbol}}</a>
+      {% endfor %}
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="drop_crypto">ETH</a>
+    <div class="dropdown-menu">  
+      {% for symbol in symbols %}
+        <a class="dropdown-item" href="drop_crypto">{{symbol}}</a>
+      {% endfor %}
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="drop_crypto">BNB</a>
+    <div class="dropdown-menu">  
+      {% for symbol in symbols %}
+        <a class="dropdown-item" href="drop_crypto">{{symbol}}</a>
+      {% endfor %}
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="drop_crypto">USDT</a>
+    <div class="dropdown-menu">
+      {% for symbol in symbols %}
+        <a class="dropdown-item" href="drop_crypto">{{symbol}}</a>
+      {% endfor %}
+    </div>    
+  </li>
+</ul>
 <table class='table table-borderless table-sm' id='table_order'></table>
 {% endblock %}
 {% block scripts %}
@@ -38,7 +81,10 @@
 
   const torder = {{table_order | safe}}    
   Plotly.plot('table_order', torder, {});
-  
+
+  const dropcr = {{drop_crypto | safe}}    
+  Plotly.plot('drop_crypto', dropcr, {});
+
   // Parse url
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);

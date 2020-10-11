@@ -40,3 +40,80 @@ name = 'ZENBNB'
 #frame3 = df(agg_tickers_list)
 #export_csv = frame3.to_csv (r"C:\Users\Usuario\downloads\tickers.csv", index = True, header=True)
 
+'''
+def convert(btc_dict, eth_base, bnb_base, usdt_base):
+  
+  if isinstance(btc_dict, (list, tuple)):
+    return [convert(i) for i in btc_dict]
+  elif isinstance(btc_dict, dict):
+    _, values = zip(*sorted(btc_dict.items()))  
+    return convert(values)
+  return btc_dict
+  btcf = convert(btc_dict, eth_base, bnb_base, usdt_base)
+
+  if isinstance(eth_base, (list, tuple)):
+    return [convert(i) for i in eth_base]
+  elif isinstance(eth_base, dict):
+    _, values = zip(*sorted(eth_base.items()))  
+    return convert(values)
+  return eth_base
+  ethf = convert(btc_dict, eth_base, bnb_base, usdt_base)
+
+  if isinstance(bnb_base, (list, tuple)):
+    return [convert(i) for i in bnb_base]
+  elif isinstance(bnb_base, dict):
+    _, values = zip(*sorted(bnb_base.items()))  
+    return convert(values)
+  return bnb_base
+  bnbf = convert(btc_dict, eth_base, bnb_base, usdt_base)
+
+  usdt_base = [{'symbol': name_usdt, 'quoteAsset': name_quote, 'baseAsset': name_base}]
+  if isinstance(usdt_base, (list, tuple)):
+    return [convert(i) for i in usdt_base]
+  elif isinstance(usdt_base, dict):
+    _, values = zip(*sorted(usdt_base.items()))  
+    return convert(values)
+  return usdt_base
+  usdtf = convert(btc_dict, eth_base, bnb_base, usdt_base)
+
+  #btcf, ethf, bnbf, usdtf = convert(btc_base, eth_base, bnb_base, usdt_base)
+  print(json.dumps(convert(btcf, ethf, bnbf, usdtf)))
+
+#new_dict = {}
+#for i in keys:
+#    new_dict[i] = []
+#    for j in values:
+#      if i in j:
+#        new_dict[i].append(j)
+#lst1 = ['wer12', 'rtgdf12', 'werfd12']
+#lst1 = [str[:-2] for str in lst1]
+#print(lst1)
+
+#a = 'abccomputer.com'
+#res = a.split('.com',1)[0]
+
+#import re
+#rm_sub('abcdc.me','.me')
+#'abcdc'
+
+#Я бы сделал регулярным выражением. Например строка mystr выглядит вот так asdw#df%mm!@* и надо удалить символы #%!@*, тогда
+#mystr = re.sub(r"[#%!@*]", "", mystr)
+
+#Если символов немного, на мой взгляд наиболее читабельный вариант:
+#text.replace('#','').replace('@','').replace('!','')
+
+#как из строки убрать все символы 'b':
+#''.join(list(filter(lambda c: c!='b', 'abasfdbbbadfbg')))
+
+#Удаление подстроки осуществляется заменой подстроки на пустую строку:
+#'Bob was eating tasty plum'.replace('tasty', '')
+#'Bob was eating plum'
+
+#s = 'abc<def*gh?ikl'
+#s.translate(None, '\/:*?"<>|')
+#'abcdefghikl'
+
+
+#export_csv = frame.to_csv (r"C:\Users\Usuario\downloads\prices.csv", index = True, header=True)
+#btc = [{'symbol': 'ETHBTC', 'quoteAsset': 'ETH', 'baseAsset': 'BTC'}]
+'''

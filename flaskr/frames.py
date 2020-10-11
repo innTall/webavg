@@ -179,8 +179,8 @@ def get_trades(trades, y_ticks=15, period=15):
   [pivtab, f8t, f10t, pivtab2, lastpt, minpr, maxpr, averpr, percscat, buyd, selld, buyu,
   sellu, firstt, last, aver15b, maxb, aver15s, maxs, maxbs, minaver, volaver,
   aver15] = get_trades(trades, y_ticks=15, period=15)
-  #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
   
+  #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
   #from binance.client import Client
   #client = Client()
   #name = 'ZENBNB'
