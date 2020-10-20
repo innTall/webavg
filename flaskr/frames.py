@@ -12,6 +12,7 @@ pd.set_option('precision', 8)
 
 #candles = client.get_klines(symbol=name, interval=Client.KLINE_INTERVAL_4HOUR)
 #trades = client.aggregate_trade_iter(symbol=name, start_str='2 days ago UTC')
+#prices = client.get_all_tickers()
 
 def get_candles(candles, y_ticks=15):
   frame1c = df(candles)
@@ -79,13 +80,13 @@ def get_candles(candles, y_ticks=15):
   perc_max_sell = max(np.abs(frame2c['perc']))
   perc_buysell_max = max(perc_max_buy, perc_max_sell)
   
-  return [frame2c, total, last_price, min_price, max_price, aver_price, scale_percent,
+  return (frame2c, total, last_price, min_price, max_price, aver_price, scale_percent,
   buy_down, sell_down, buy_up, sell_up, amount, first_time, last_time, max_volume,
   max_buy_vol, max_sell_vol, max_buysell_vol, aver_volume, aver_percent, perc_max_buy,
-  perc_max_sell, perc_buysell_max]
+  perc_max_sell, perc_buysell_max)
 
-  [f2c, pivtab1, lastpc, mic, mac, avc, perscalec, buyd, selld, buyu, sellu, nums, ft, lt,
-  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs] = get_candles(candles, y_ticks=15)
+  (f2c, pivtab1, lastpc, mic, mac, avc, perscalec, buyd, selld, buyu, sellu, nums, ft, lt,
+  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs) = get_candles(candles, y_ticks=15)
   #export_csv = f5c.to_csv (r"C:\Users\Usuario\downloads\f5c.csv", index = True, header=True)
 
 def get_trades(trades, y_ticks=15, period=15):
@@ -172,17 +173,78 @@ def get_trades(trades, y_ticks=15, period=15):
   frame10t = df(frame9t, columns=['date', 'price', 'market', 'buy', 'sell', 'order'])
   total2 = frame10t.pivot_table(['price', 'buy', 'sell'], ['date'], aggfunc='sum')
   
-  return [total, frame8t, frame10t, total2, last_price, min_price, max_price, aver_price, scale_percent,
+  return (total, frame8t, frame10t, total2, last_price, min_price, max_price, aver_price, scale_percent,
   buy_down, sell_down, buy_up, sell_up, first_time, last_time, aver_buy15_order, max_buy_order,
-  aver_sell15_order, max_sell_order, max_buysell_order, min_aver_buysell, aver_volume, aver_15m_vol]
+  aver_sell15_order, max_sell_order, max_buysell_order, min_aver_buysell, aver_volume, aver_15m_vol)
 
-  [pivtab, f8t, f10t, pivtab2, lastpt, minpr, maxpr, averpr, percscat, buyd, selld, buyu,
+  (pivtab, f8t, f10t, pivtab2, lastpt, minpr, maxpr, averpr, percscat, buyd, selld, buyu,
   sellu, firstt, last, aver15b, maxb, aver15s, maxs, maxbs, minaver, volaver,
-  aver15] = get_trades(trades, y_ticks=15, period=15)
+  aver15) = get_trades(trades, y_ticks=15, period=15)
+
+def get_cryptos(prices):
+  agg_prices_list = list(prices)
+  frame = df(agg_prices_list)
+  symbols = frame['symbol']
+
+  btc_b=[]
+  name_quote=[]
+  name_base=[]
+  for symbol in symbols:
+    if symbol[-3:] == 'BTC':
+      btc_b.append(symbol)
+  name_btc = btc_b
   
+  eth_e=[]
+  name_quote=[]
+  name_base=[]
+  for symbol in symbols:
+    if symbol[-3:] == 'ETH':
+      eth_e.append(symbol)
+  name_eth = eth_e
+
+  bnb_bn=[]
+  name_quote=[]
+  name_base=[]
+  for symbol in symbols:
+    if symbol[-3:] == 'BNB':
+      bnb_bn.append(symbol)
+  name_bnb = bnb_bn
+  
+  usdt_u=[]
+  name_quote=[]
+  name_base=[]
+  for symbol in symbols:
+    if symbol[-4:] == 'USDT':
+      usdt_u.append(symbol)
+  name_usdt = usdt_u
+  
+  return (name_btc, name_eth, name_bnb, name_usdt)
+  (btcx, ethx, bnbx, usdtx) = get_cryptos(prices)
+  
+  #print(btcx, ethx, bnbx, usdtx) 
+  #print('\n'.join(btcx))
   #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)
   #from binance.client import Client
   #client = Client()
   #name = 'ZENBNB'
   #candles = client.get_klines(symbol=name, interval=Client.KLINE_INTERVAL_4HOUR)
   #trades = client.aggregate_trade_iter(symbol=name, start_str='2 days ago UTC')
+
+  # btc_b=[]
+  # name_quote=[]
+  # name_base=[]
+  # for symbol in symbols:
+  #   if symbol[-3:] == 'BTC':
+  #     btc_b.append(symbol)
+  # name_quote = btc_b
+  # name_quote = [str[:-3] for str in name_quote] #btc_base = dict(zip(keys, values))
+  # name_base = btc_b
+  # name_base = [str[-3:] for str in name_base] 
+  # btc_base = {'symbol': name_btc, 'quoteAsset': name_quote, 'baseAsset': name_base}
+  #print(name_btc)
+
+  #export_csv = btcx.to_csv (r'C:\Users\Usuario\downloads\dict.csv', index = True, header=True)
+
+  # keys = ('symbol', 'quoteAsset', 'baseAsset')
+  # values = (name_btc, name_quote, name_base)
+  # btc_base = [{key: value for key, value in zip(keys, values)}]

@@ -21,44 +21,65 @@
 <table class='table table-borderless table-sm' id='table_price'></table>
 {% endblock %}
 {% block other %}
-<table class='table table-borderless table-sm' id='drop_crypto'></table>
+<ul class="nav nav-pills nav-pills-sm">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="pill" href="#news">News</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="pill" href="#analyse">Analyse</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="pill" href="#crypto">Crypto</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="pill" href="#other">Other</a>
+  </li>
+</ul>
 {% endblock %}
 {% block upright %}
 <div class='chart' id='small_chart'></div>
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs">     <!--<div class="btn-group">-->
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/crypto">BTC</a>
-    <div class="dropdown-menu">  
-      {% for symbol in symbols %}
-        <a class="dropdown-item" href="/crypto">{{symbol}}</a>
-      {% endfor %}
-    </div>
-  </li>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="drop_crypto">ETH</a>
-    <div class="dropdown-menu">  
-      {% for symbol in symbols %}
-        <a class="dropdown-item" href="drop_crypto">{{symbol}}</a>
-      {% endfor %}
-    </div>
-  </li>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="drop_crypto">BNB</a>
-    <div class="dropdown-menu">  
-      {% for symbol in symbols %}
-        <a class="dropdown-item" href="drop_crypto">{{symbol}}</a>
-      {% endfor %}
-    </div>
-  </li>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="drop_crypto">USDT</a>
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">BTC</a>
     <div class="dropdown-menu">
-      {% for symbol in symbols %}
-        <a class="dropdown-item" href="drop_crypto">{{symbol}}</a>
+      <p><input type="search" list="character">
+      {% for btcx in btcx %}
+        <a class="dropdown-item" id='btcx' href="#">{{btcx}}</a>
       {% endfor %}
-    </div>    
+      </p>
+    </div>
+  </li>  
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">ETH</a>
+    <div class="dropdown-menu">
+      <p><input type="search" list="character">
+      {% for ethx in ethx %}
+        <a class="dropdown-item" id='ethx' href="#">{{ethx}}</a>
+      {% endfor %}
+      </p>
+    </div>
   </li>
-</ul>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">BNB</a>
+    <div class="dropdown-menu">
+      <p><input type="search" list="character">
+      {% for bnbx in bnbx %}
+        <a class="dropdown-item" id='bnbx' href="#">{{bnbx}}</a>
+      {% endfor %}
+      </p>
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">USDT</a>
+    <div class="dropdown-menu">
+      <p><input type="search" list="character">
+      {% for usdtx in usdtx %}
+        <a class="dropdown-item" id='usdtx' href="#">{{usdtx}}</a>
+      {% endfor %}
+      </p>
+    </div>
+  </li>
+</ul>    
 <table class='table table-borderless table-sm' id='table_order'></table>
 {% endblock %}
 {% block scripts %}
@@ -81,9 +102,6 @@
 
   const torder = {{table_order | safe}}    
   Plotly.plot('table_order', torder, {});
-
-  const dropcr = {{drop_crypto | safe}}    
-  Plotly.plot('drop_crypto', dropcr, {});
 
   // Parse url
   const queryString = window.location.search;
@@ -125,12 +143,45 @@
 </script>
 {% endblock %}
 
-<!--const graphs = {{trade_chart | safe}}    <div class="chart" id='trade_chart'></div>
-Plotly.plot('trade_chart', graphs, {});-->
-
-<!--<table class='table table-borderless table-sm' id='table_time'></table>
-  <thead class="thead-dark"></thead>
-<table class='table table-borderless table-sm' id='table_price'></table>
-  <thead class="thead-dark"></thead>
-<table class='table table-borderless table-sm' id='table_order'></table>
-  <thead class="thead-dark"></thead>-->
+<!--<ul class="nav nav-tabs">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">BTC</a>
+    <div class="dropdown-menu">  
+      <p><input type="search" list="character">
+        {% for crypto in cryptos %}
+          <a class="dropdown-item" href="#">{{btcx}}</a>
+        {% endfor %}
+      </p>
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">ETH</a>
+    <div class="dropdown-menu">
+      <p><input type="search" list="character">  
+        {% for crypto in cryptos %}
+          <a class="dropdown-item" href="#">{{ethx}}</a>
+        {% endfor %}
+      </p>
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">BNB</a>
+    <div class="dropdown-menu">
+      <p><input type="search" id='test' list="character"> 
+        {% for crypto in cryptos %}
+          <a class="dropdown-item" id="dropdown_crypto" href="#">{{bnbx}}</a>
+        {% endfor %}
+      </p>
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/frames">USDT</a>
+    <div class="dropdown-menu">
+      <p><input type="search" list="character">
+        {% for crypto in cryptos %}
+          <a class="dropdown-item" href="/frames">{{usdtx}}</a>
+        {% endfor %}
+      </p>
+    </div>    
+  </li>
+</ul>-->

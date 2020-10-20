@@ -2,10 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for
 from binance.client import Client
 import numpy as np
 import json
-from flaskr.frames import get_candles, get_trades
-from flaskr.crypto import get_crypto
+from flaskr.frames import get_candles, get_trades, get_cryptos
 from flaskr.charts import candlestick_chart, order_chart, simple_chart
-from flaskr.charts import candles_time, candles_price, trades_order, dropdown_crypto
+from flaskr.charts import candles_time, candles_price, trades_order
 
 client = Client()
 
@@ -34,13 +33,12 @@ def get_dashboard():
   trade_chart = order_chart(variables_trades)
   table_order = trades_order(variables_trades)
   prices = client.get_all_tickers()
-  crypto_bases = get_crypto(prices)
-  drop_crypto = dropdown_crypto(crypto_bases)
+  btcx, ethx, bnbx, usdtx = get_cryptos(prices)
   return render_template('dashboard.html', candle_chart=candle_chart, intervals=intervals,
                       trade_chart=trade_chart, times=times, small_chart=small_chart,
                       table_time=table_time, table_price=table_price, table_order=table_order,
-                      drop_crypto=drop_crypto)
-
+                      btcx=btcx, ethx=ethx, bnbx=bnbx, usdtx=usdtx)
+  
 @app.route('/candles', methods=['GET', 'POST'])
 def test_candles():
   symbol = request.form['symbol']
@@ -86,9 +84,9 @@ def test_orderes():
   table_order = trades_order(variables_trades)
   return table_order
 
-@app.route('/crypto', methods=['GET', 'POST'])
-def test_crypto():
+@app.route('/cryptos', methods=['GET', 'POST'])
+def test_cryptos():
   prices = client.get_all_tickers()
-  crypto_bases = get_crypto(prices)
-  drop_crypto = dropdown_crypto(crypto_bases)
-  return drop_crypto
+  btcx, ethx, bnbx, usdtx = get_cryptos(prices)
+  return btcx, ethx, bnbx, usdtx
+  #print(btcx, ethx, bnbx, usdtx)

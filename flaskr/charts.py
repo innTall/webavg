@@ -11,18 +11,9 @@ import ta
 import json
 
 def candlestick_chart(variables_candles):
-  f2c = variables_candles[0]
-  mic = variables_candles[3]
-  mac = variables_candles[4]
-  avc = variables_candles[5]
-  buyd = variables_candles[7]
-  selld = variables_candles[8]
-  buyu = variables_candles[9]
-  sellu = variables_candles[10]
-  ft = variables_candles[12]
-  lt = variables_candles[13]
-  averperc = variables_candles[19]
-
+  (f2c, pivtab1, lastpc, mic, mac, avc, perscalec, buyd, selld, buyu, sellu, nums, ft, lt,
+  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs) = variables_candles
+    
   fig = make_subplots(rows=4, cols=1,
     shared_xaxes=True, # связывание осей x
     vertical_spacing=0.02, # интервал по вертикали
@@ -161,16 +152,8 @@ def order_chart(variables_trades):
   return graphJSON
 
 def simple_chart(variables_candles):
-  f2c = variables_candles[0]
-  mic = variables_candles[3]
-  mac = variables_candles[4]
-  avc = variables_candles[5]
-  buyd = variables_candles[7]
-  selld = variables_candles[8]
-  buyu = variables_candles[9]
-  sellu = variables_candles[10]
-  ft = variables_candles[12]
-  lt = variables_candles[13]
+  (f2c, pivtab1, lastpc, mic, mac, avc, perscalec, buyd, selld, buyu, sellu, nums, ft, lt,
+  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs) = variables_candles
   
   x = f2c['date']
   y1 = f2c['open']
@@ -279,44 +262,61 @@ def trades_order(variables_trades):
   graphJSON = json.dumps(f10t, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
-def dropdown_crypto(crypto_bases):
-  btcf = crypto_bases[1]
-  #btc_dict = [{'symbol': name_btc, 'quoteAsset': name_quote, 'baseAsset': name_base}]
-  #btcf = pd.DataFrame(btc_df)
+# def dropdown_btc(btcx):
+    
+#   btcxJSON = json.dumps(btcx)
+#   return btcxJSON
+
+# def dropdown_eth(ethx):
   
-  btcf = go.Figure(go.Table(
-    header = dict(values = ['symbol', 'quoteAsset', 'baseAsset'],
-                  line_color='#0000FF',
-                  fill_color='#FFFFFF',
-                  align=['center'],
-                  font=dict(color='#0000FF', size=12)
-                  ),
-    cells = dict(values = ['name_btc', 'name_quote', 'name_base'],
-                line_color='#1E90FF',
-                fill_color='#FFFFFF',
-                align = ['left', 'center'],
-                font = dict(color = '#696969', size = 10)
-                ),
-    domain = dict(x=[0, 1], y=[0, 1]))
-  )
-  btcf.update_layout(paper_bgcolor='rgba(0,0,0,0)',
-                  plot_bgcolor='rgba(0,0,0,0)',
-                  margin=dict(l=0, r=0, t=0, b=0)
-  )
-  graphJSON = json.dumps(btcf, cls=plotly.utils.PlotlyJSONEncoder)
-  return graphJSON
+#   ethxJSON = json.dumps(ethx)
+#   return ethxJSON
 
-'''
+# def dropdown_bnb(bnbx):
+  
+#   bnbxJSON = json.dumps(bnbx)
+#   return bnbxJSON
 
-                      dict(type='line', xref='x1', yref='y7', name='volperc', line_width=0.8,
-                          x0=ft, y0=averperc, x1=lt, y1=averperc, line_color='#0000CD',
-                          line = dict(dash='dot')),
-                        dict(type='line', xref='x', yref='y9', name='rsi', line_width=0.8,
-                          x0=ft, y0=30, x1=lt, y1=30, line_color='#0000CD',
-                          line = dict(dash='dot')),
-                        dict(type='line', xref='x', yref='y9', name='rsi', line_width=0.8,
-                          x0=ft, y0=70, x1=lt, y1=70, line_color='#0000CD',
-                          line = dict(dash='dot'))],
+# def dropdown_usdt(usdtx):
+ 
+#   usdtxJSON = json.dumps(usdtx)
+#   return usdtxJSON
+  
+# #btcf = pd.DataFrame(btc_df)
+  
+#   btcf = go.Figure(go.Table(
+#     header = dict(values = ['symbol', 'quoteAsset', 'baseAsset'],
+#                   line_color='#0000FF',
+#                   fill_color='#FFFFFF',
+#                   align=['center'],
+#                   font=dict(color='#0000FF', size=12)
+#                   ),
+#     cells = dict(values = ['name_btc', 'name_quote', 'name_base'],
+#                 line_color='#1E90FF',
+#                 fill_color='#FFFFFF',
+#                 align = ['left', 'center'],
+#                 font = dict(color = '#696969', size = 10)
+#                 ),
+#     domain = dict(x=[0, 1], y=[0, 1]))
+#   )
+#   btcf.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+#                   plot_bgcolor='rgba(0,0,0,0)',
+#                   margin=dict(l=0, r=0, t=0, b=0)
+#   )
+#   graphJSON = json.dumps(btcf, cls=plotly.utils.PlotlyJSONEncoder)
+#   return graphJSON
+
+
+
+                      # dict(type='line', xref='x1', yref='y7', name='volperc', line_width=0.8,
+                      #     x0=ft, y0=averperc, x1=lt, y1=averperc, line_color='#0000CD',
+                      #     line = dict(dash='dot')),
+                      #   dict(type='line', xref='x', yref='y9', name='rsi', line_width=0.8,
+                      #     x0=ft, y0=30, x1=lt, y1=30, line_color='#0000CD',
+                      #     line = dict(dash='dot')),
+                      #   dict(type='line', xref='x', yref='y9', name='rsi', line_width=0.8,
+                      #     x0=ft, y0=70, x1=lt, y1=70, line_color='#0000CD',
+                      #     line = dict(dash='dot'))],
 
   
   #row_heights=[0.6, 0.2, 0.2], # относительная высота строк Subplot
@@ -329,4 +329,14 @@ def dropdown_crypto(crypto_bases):
    
 # py.image.save_as({'data':data}, 'scatter_plot', format='png')
 # py.image.save_as(fig, 'my_plot.png')
-'''
+# f2c = variables_candles[0]
+  # mic = variables_candles[3]
+  # mac = variables_candles[4]
+  # avc = variables_candles[5]
+  # buyd = variables_candles[7]
+  # selld = variables_candles[8]
+  # buyu = variables_candles[9]
+  # sellu = variables_candles[10]
+  # ft = variables_candles[12]
+  # lt = variables_candles[13]
+  # averperc = variables_candles[19]
