@@ -40,7 +40,7 @@
 <div class='chart' id='small_chart'></div>
 <ul class="nav nav-tabs">     <!--<div class="btn-group">-->
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">BTC</a>
+    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown" href="#">BTC</a>
     <div class="dropdown-menu">
       <p><input type="search" list="character">
       {% for btcx in btcx %}
@@ -50,7 +50,7 @@
     </div>
   </li>  
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">ETH</a>
+    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown" href="#">ETH</a>
     <div class="dropdown-menu">
       <p><input type="search" list="character">
       {% for ethx in ethx %}
@@ -60,7 +60,7 @@
     </div>
   </li>
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">BNB</a>
+    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown" href="#">BNB</a>
     <div class="dropdown-menu">
       <p><input type="search" list="character">
       {% for bnbx in bnbx %}
@@ -70,7 +70,7 @@
     </div>
   </li>
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">USDT</a>
+    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown" href="#">USDT</a>
     <div class="dropdown-menu">
       <p><input type="search" list="character">
       {% for usdtx in usdtx %}
@@ -142,46 +142,3 @@
   });
 </script>
 {% endblock %}
-
-<!--<ul class="nav nav-tabs">
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">BTC</a>
-    <div class="dropdown-menu">  
-      <p><input type="search" list="character">
-        {% for crypto in cryptos %}
-          <a class="dropdown-item" href="#">{{btcx}}</a>
-        {% endfor %}
-      </p>
-    </div>
-  </li>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">ETH</a>
-    <div class="dropdown-menu">
-      <p><input type="search" list="character">  
-        {% for crypto in cryptos %}
-          <a class="dropdown-item" href="#">{{ethx}}</a>
-        {% endfor %}
-      </p>
-    </div>
-  </li>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">BNB</a>
-    <div class="dropdown-menu">
-      <p><input type="search" id='test' list="character"> 
-        {% for crypto in cryptos %}
-          <a class="dropdown-item" id="dropdown_crypto" href="#">{{bnbx}}</a>
-        {% endfor %}
-      </p>
-    </div>
-  </li>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/frames">USDT</a>
-    <div class="dropdown-menu">
-      <p><input type="search" list="character">
-        {% for crypto in cryptos %}
-          <a class="dropdown-item" href="/frames">{{usdtx}}</a>
-        {% endfor %}
-      </p>
-    </div>    
-  </li>
-</ul>-->

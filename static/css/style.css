@@ -23,3 +23,8 @@ h1 {
 .nav-link {
     font-size: 12px;
 }
+.dropdown-menu {         
+    max-height: 150px;
+    font-size: 10px;
+    overflow-y: auto;
+}
