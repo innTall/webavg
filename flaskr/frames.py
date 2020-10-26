@@ -186,41 +186,31 @@ def get_cryptos(prices):
   frame = df(agg_prices_list)
   symbols = frame['symbol']
 
-  btc_b=[]
-  name_quote=[]
-  name_base=[]
+  btc=[]
+  eth=[]
+  bnb=[]
+  usdt=[]
   for symbol in symbols:
     if symbol[-3:] == 'BTC':
-      btc_b.append(symbol)
-  name_btc = btc_b
-  
-  eth_e=[]
-  name_quote=[]
-  name_base=[]
-  for symbol in symbols:
-    if symbol[-3:] == 'ETH':
-      eth_e.append(symbol)
-  name_eth = eth_e
+      btc.append(symbol)
+    elif symbol[-3:] == 'ETH':
+      eth.append(symbol)
+    elif symbol[-3:] == 'BNB':
+      bnb.append(symbol)
+    elif symbol[-4:] == 'USDT':
+      usdt.append(symbol)
 
-  bnb_bn=[]
-  name_quote=[]
-  name_base=[]
-  for symbol in symbols:
-    if symbol[-3:] == 'BNB':
-      bnb_bn.append(symbol)
-  name_bnb = bnb_bn
+  return (btc, eth, bnb, usdt)
+  (btc, eth, bnb, usdt) = get_cryptos(prices)
   
-  usdt_u=[]
-  name_quote=[]
-  name_base=[]
-  for symbol in symbols:
-    if symbol[-4:] == 'USDT':
-      usdt_u.append(symbol)
-  name_usdt = usdt_u
+  # markets[btc] = btc
+  # markets[eth] = eth
+  # markets[bnb] = bnb
+  # markets[usdt] = usdt
+  # return markets
   
-  return (name_btc, name_eth, name_bnb, name_usdt)
-  (btcx, ethx, bnbx, usdtx) = get_cryptos(prices)
   
+  #(btc, eth, bnb, usdt)
   #print(btcx, ethx, bnbx, usdtx) 
   #print('\n'.join(btcx))
   #export_csv = f8t.to_csv (r'C:\Users\Usuario\downloads\f8t1.csv', index = True, header=True)

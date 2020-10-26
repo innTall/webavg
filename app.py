@@ -33,11 +33,11 @@ def get_dashboard():
   trade_chart = order_chart(variables_trades)
   table_order = trades_order(variables_trades)
   prices = client.get_all_tickers()
-  btcx, ethx, bnbx, usdtx = get_cryptos(prices)
+  btc, eth, bnb, usdt = get_cryptos(prices)
   return render_template('dashboard.html', candle_chart=candle_chart, intervals=intervals,
                       trade_chart=trade_chart, times=times, small_chart=small_chart,
                       table_time=table_time, table_price=table_price, table_order=table_order,
-                      btcx=btcx, ethx=ethx, bnbx=bnbx, usdtx=usdtx)
+                      btc=btc, eth=eth, bnb=bnb, usdt=usdt)
   
 @app.route('/candles', methods=['GET', 'POST'])
 def test_candles():
@@ -87,8 +87,9 @@ def test_orderes():
 @app.route('/cryptos', methods=['GET', 'POST'])
 def test_cryptos():
   prices = client.get_all_tickers()
-  btcx, ethx, bnbx, usdtx = get_cryptos(prices)
-  return btcx, ethx, bnbx, usdtx
+  btc, eth, bnb, usdt = get_cryptos(prices)
+  return btc, eth, bnb, usdt
+  
   # list(btcx)
   # list(ethx)
   # list(bnbx)
