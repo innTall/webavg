@@ -5,17 +5,20 @@
 {% block chart %}
 <div class='btn-group btn-group-sm' role='group' aria-label='Basic example'>
   {% for interval in intervals %}
-    <button type='button' id='test' class='btn btn-outline-info'>{{interval}}</button>
+    <button type='button' id='test' 
+            class='btn btn-outline-info'>{{interval}}</button>
   {% endfor %}
   {% for time in times %}
-    <button type='button' id='test' class='btn btn-outline-success'>{{time}}</button>
+    <button type='button' id='test' 
+            class='btn btn-outline-success'>{{time}}</button>
   {% endfor %}
 </div>
 <div class='chart' id='candle_chart'></div>
 <div class='chart' id='trade_chart'></div>
 {% endblock %}
 {% block table %}
-<table class='table table-borderless table-sm' id='table_time'></table>
+<table class='table table-borderless table-sm' id='table_time'
+    data-toggle="table"></table>
 {% endblock %}
 {% block center %}
 <table class='table table-borderless table-sm' id='table_price'></table>
@@ -40,7 +43,8 @@
 <div class='chart' id='small_chart'></div>
 <ul class="nav nav-tabs">     <!--<div class="btn-group">-->
   <li class="nav-item dropdown">
-    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown" href="#">BTC</a>
+    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown"
+      href="#">BTC</a>
     <div class="dropdown-menu">
       <p><input type="search" list="character">
       {% for btc in btc %}
@@ -50,7 +54,8 @@
     </div>
   </li>
   <li class="nav-item dropdown">
-    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown" href="#">ETH</a>
+    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown"
+      href="#">ETH</a>
     <div class="dropdown-menu">
       <p><input type="search" list="character">
       {% for eth in eth %}
@@ -60,7 +65,8 @@
     </div>
   </li>
   <li class="nav-item dropdown">
-    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown" href="#">BNB</a>
+    <a class="nav-link nav-link-sm dropdown-toggle" data-toggle="dropdown"
+      href="#">BNB</a>
     <div class="dropdown-menu">
       <p><input type="search" list="character">
       {% for bnb in bnb %}

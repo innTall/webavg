@@ -10,10 +10,8 @@ from plotly.subplots import make_subplots
 import ta
 import json
 
-def candlestick_chart(variables_candles):
-  (f2c, pivtab1, lastpc, mic, mac, avc, perscalec, buyd, selld, buyu, sellu, nums, ft, lt,
-  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs) = variables_candles
-    
+def candlestick_chart(frame1c):
+      
   fig = make_subplots(rows=4, cols=1,
     shared_xaxes=True, # связывание осей x
     vertical_spacing=0.02, # интервал по вертикали
@@ -25,18 +23,18 @@ def candlestick_chart(variables_candles):
     ]
   )
   
-  x = f2c['date']
-  y1 = f2c['open']
-  y2 = f2c['high']
-  y3 = f2c['low']
-  y4 = f2c['close']
-  y5 = f2c['buy']
-  y6 = f2c['sell']
-  y7 = f2c['perc']
-  y8 = f2c['ao'] #f2c['ao'] = ta.utils.dropna(f2c['ao'])
-  y9 = f2c['rsi'] #f2c['rsi'] = ta.utils.dropna(f2c['rsi'])
+  x = frame1c['date']
+  y1 = frame1c['open']
+  y2 = frame1c['high']
+  y3 = frame1c['low']
+  y4 = frame1c['close']
+  y5 = frame1c['buy']
+  y6 = frame1c['sell']
+  y7 = frame1c['perc']
+  y8 = frame1c['ao'] #frame1c['ao'] = ta.utils.dropna(frame1c['ao'])
+  y9 = frame1c['rsi'] #frame1c['rsi'] = ta.utils.dropna(frame1c['rsi'])
     
-  f2c = fig.add_trace(
+  frame1c = fig.add_trace(
     go.Candlestick(x=x, open=y1, high=y2, low=y3, close=y4, name='candles',
                   line = dict(width=1),
                   increasing = dict(
@@ -47,30 +45,30 @@ def candlestick_chart(variables_candles):
                   )), row=1, col=1
   )
   
-  f2c = fig.add_trace(go.Line(x=x, y=y5, name='volbuy',
+  frame1c = fig.add_trace(go.Line(x=x, y=y5, name='volbuy',
                         line = dict(width = 1, color = '#006400')
                         ), row=3, col=1, secondary_y=False
   )
              
-  f2c = fig.add_trace(go.Line(x=x, y=y6, name='volsell',
+  frame1c = fig.add_trace(go.Line(x=x, y=y6, name='volsell',
                         line = dict(width = 1, color = '#FF0000')
                         ), row=3, col=1, secondary_y=False
   )
           
-  f2c = fig.add_trace(go.Bar(x=x, y=y7, name='volperc',
+  frame1c = fig.add_trace(go.Bar(x=x, y=y7, name='volperc',
                       marker = dict(
                         line = dict(width = 1,
                         color=np.where(y7 > 0, '#1E90FF', '#FF00FF').tolist())
                       )), row=3, col=1, secondary_y=True
   )
   
-  f2c = fig.add_trace(go.Bar(x=x, y=y8, name='ao',
+  frame1c = fig.add_trace(go.Bar(x=x, y=y8, name='ao',
                       marker = dict(
                         line=dict(width = 0.8, color = '#228B22')
                       )), row=4, col=1, secondary_y=False
   )
 
-  f2c = fig.add_trace(go.Line(x=x, y=y9, name='rsi',
+  frame1c = fig.add_trace(go.Line(x=x, y=y9, name='rsi',
                         line = dict(width = 0.8, color = '#FF0000')
                         ), row=4, col=1, secondary_y=True
   )
@@ -78,15 +76,15 @@ def candlestick_chart(variables_candles):
   fig.update_layout(xaxis_rangeslider_visible=False,   #line_width=0.6
                   paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
-                  shapes = [
-                          dict(name='candles', type='line',
-                          xref='paper', yref='y', line_width=0.8,
-                          x0=0, x1=1,
-                          y0=y,
-                          y1=y,
-                          line_color='#A9A9A9', line=dict(dash='dot'))
-                          for y in [avc, mic, buyd, selld, buyu, sellu, mac]
-                  ],
+                  # shapes = [
+                  #         dict(name='candles', type='line',
+                  #         xref='paper', yref='y', line_width=0.8,
+                  #         x0=0, x1=1,
+                  #         y0=y,
+                  #         y1=y,
+                  #         line_color='#A9A9A9', line=dict(dash='dot'))
+                  #         for y in [avc, mic, buyd, selld, buyu, sellu, mac]
+                  # ],
                   xaxis = dict(
                     showgrid = False,
                     showline = False,
@@ -106,11 +104,11 @@ def candlestick_chart(variables_candles):
                   ), margin=dict(l=0, r=0, t=0, b=0)
   )
  
-  graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(frame1c, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
-def order_chart(variables_trades):
-  f8t = variables_trades[1]
+def order_chart(frame7t):
+  
   fig = make_subplots(rows=3, cols=1,
     shared_xaxes=True, # связывание осей x
     vertical_spacing=0.02, # интервал по вертикали
@@ -121,23 +119,23 @@ def order_chart(variables_trades):
     ]
   )
   
-  x = f8t['date']
-  x1 = f8t['market']
-  y1 = f8t['price']
-  y2 = f8t['buy']
-  y3 = f8t['sell']
+  x = frame7t['date']
+  x1 = frame7t['market']
+  y1 = frame7t['price']
+  y2 = frame7t['buy']
+  y3 = frame7t['sell']
 
-  f8t = fig.add_trace(go.Scatter(x=x, y=y1, name='price',
+  frame7t = fig.add_trace(go.Scatter(x=x, y=y1, name='price',
                         line = dict(width = 1, color = '#006400')
                         ), row=1, col=1, secondary_y=False
   )
              
-  f8t = fig.add_trace(go.Scatter(x=x, y=y2, name='buyorder',
+  frame7t = fig.add_trace(go.Scatter(x=x, y=y2, name='buyorder',
                         line = dict(width = 1, color = '#FF0000')
                         ), row=3, col=1, secondary_y=False
   )
           
-  f8t = fig.add_trace(go.Bar(x=x, y=y3, name='sellorder',
+  frame7t = fig.add_trace(go.Bar(x=x, y=y3, name='sellorder',
                       marker = dict(
                         line = dict(width = 1, color = '#6A5ACD')
                       )), row=3, col=1, secondary_y=False
@@ -148,20 +146,18 @@ def order_chart(variables_trades):
                   plot_bgcolor='rgba(0,0,0,0)',
                   margin=dict(l=0, r=0, t=0, b=0)
   )
-  graphJSON = json.dumps(f8t, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(frame7t, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
-def simple_chart(variables_candles):
-  (f2c, pivtab1, lastpc, mic, mac, avc, perscalec, buyd, selld, buyu, sellu, nums, ft, lt,
-  volmax, volmab, volmas, volbs, volav, averperc, percmab, percmas, percmabs) = variables_candles
+def simple_chart(frame1c):
+    
+  x = frame1c['date']
+  y1 = frame1c['open']
+  y2 = frame1c['high']
+  y3 = frame1c['low']
+  y4 = frame1c['close']
   
-  x = f2c['date']
-  y1 = f2c['open']
-  y2 = f2c['high']
-  y3 = f2c['low']
-  y4 = f2c['close']
-  
-  f2c = go.Figure(go.Candlestick(
+  frame1c = go.Figure(go.Candlestick(
                   x = x, open = y1, high = y2, low = y3, close = y4, name = 'btc',
                   line = dict(width=1),
                   increasing = dict(
@@ -173,31 +169,31 @@ def simple_chart(variables_candles):
                   layout = go.Layout(xaxis_rangeslider_visible=False,
                   paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
-                  shapes = [
-                          dict(name='candles', type='line',
-                          xref='paper', yref='y', line_width=0.8,
-                          x0=0, x1=1,
-                          y0=y,
-                          y1=y,
-                          line_color='#A9A9A9', line=dict(dash='dot'))
-                          for y in [avc, mic, buyd, selld, buyu, sellu, mac]
-                  ],
+                  # shapes = [
+                  #         dict(name='candles', type='line',
+                  #         xref='paper', yref='y', line_width=0.8,
+                  #         x0=0, x1=1,
+                  #         y0=y,
+                  #         y1=y,
+                  #         line_color='#A9A9A9', line=dict(dash='dot'))
+                  #         for y in [avc, mic, buyd, selld, buyu, sellu, mac]
+                  #],
                   margin=dict(l=0, r=0, t=0, b=0))
   )
-  graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(frame1c, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
-def candles_time(variables_candles):
-  f2c = variables_candles[0]
-  
-  f2c = go.Figure(go.Table(
+def candles_time(frame1c):
+    
+  frame1c = go.Figure(go.Table(
     header = dict(values = ['date', 'price', 'buy', 'sell', 'market', 'diff'],
                   line_color='#0000FF',
                   fill_color='#FFFFFF',
                   align=['center'],
                   font=dict(color='#0000FF', size=12)
                   ),
-    cells = dict(values = [f2c.date, f2c.price, f2c.buy, f2c.sell, f2c.market],
+    cells = dict(values = [frame1c.date, frame1c.price,
+                 frame1c.buy, frame1c.sell, frame1c.market],
                 line_color='#1E90FF',
                 fill_color='#FFFFFF',
                 align = ['left', 'center'],
@@ -205,24 +201,23 @@ def candles_time(variables_candles):
                 ),
     domain = dict(x=[0, 1], y=[0, 1]))
   )
-  f2c.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+  frame1c.update_layout(paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
                   margin=dict(l=0, r=0, t=0, b=0)
   )
-  graphJSON = json.dumps(f2c, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(frame1c, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
-def candles_price(variables_candles):
-  pivtab1 = variables_candles[1]
-  
-  pivtab1 = go.Figure(go.Table(
+def candles_price(total):
+    
+  total = go.Figure(go.Table(
     header = dict(values = ['buy', 'sell', 'market', 'price', 'diff'],
                   line_color='#0000FF',
                   fill_color='#FFFFFF',
                   align=['center'],
                   font=dict(color='#0000FF', size=12)
                   ),
-    cells = dict(values = [pivtab1.buy, pivtab1.sell, pivtab1.market],
+    cells = dict(values = [total.buy, total.sell, total.market],
                 line_color='#1E90FF',
                 fill_color='#FFFFFF',
                 align = ['left', 'center'],
@@ -230,24 +225,24 @@ def candles_price(variables_candles):
                 ),
     domain = dict(x=[0, 1], y=[0, 1]))
   )
-  pivtab1.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+  total.update_layout(paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
                   margin=dict(l=0, r=0, t=0, b=0)
   )
-  graphJSON = json.dumps(pivtab1, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(total, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
 
-def trades_order(variables_trades):
-  f10t = variables_trades[2]
-  
-  f10t = go.Figure(go.Table(
+def trades_order(frame10t):
+    
+  frame10t = go.Figure(go.Table(
     header = dict(values = ['date', 'price', 'buy', 'sell', 'market', 'order'],
                   line_color='#0000FF',
                   fill_color='#FFFFFF',
                   align=['center'],
                   font=dict(color='#0000FF', size=12)
                   ),
-    cells = dict(values = [f10t.date, f10t.price, f10t.buy, f10t.sell, f10t.market, f10t.order],
+    cells = dict(values = [frame10t.date, frame10t.price, frame10t.buy,
+                frame10t.sell, frame10t.market, frame10t.order],
                 line_color='#1E90FF',
                 fill_color='#FFFFFF',
                 align = ['left', 'center'],
@@ -255,57 +250,12 @@ def trades_order(variables_trades):
                 ),
     domain = dict(x=[0, 1], y=[0, 1]))
   )
-  f10t.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+  frame10t.update_layout(paper_bgcolor='rgba(0,0,0,0)',
                   plot_bgcolor='rgba(0,0,0,0)',
                   margin=dict(l=0, r=0, t=0, b=0)
   )
-  graphJSON = json.dumps(f10t, cls=plotly.utils.PlotlyJSONEncoder)
+  graphJSON = json.dumps(frame10t, cls=plotly.utils.PlotlyJSONEncoder)
   return graphJSON
-
-# def dropdown_btc(btcx):
-    
-#   btcxJSON = json.dumps(btcx)
-#   return btcxJSON
-
-# def dropdown_eth(ethx):
-  
-#   ethxJSON = json.dumps(ethx)
-#   return ethxJSON
-
-# def dropdown_bnb(bnbx):
-  
-#   bnbxJSON = json.dumps(bnbx)
-#   return bnbxJSON
-
-# def dropdown_usdt(usdtx):
- 
-#   usdtxJSON = json.dumps(usdtx)
-#   return usdtxJSON
-  
-# #btcf = pd.DataFrame(btc_df)
-  
-#   btcf = go.Figure(go.Table(
-#     header = dict(values = ['symbol', 'quoteAsset', 'baseAsset'],
-#                   line_color='#0000FF',
-#                   fill_color='#FFFFFF',
-#                   align=['center'],
-#                   font=dict(color='#0000FF', size=12)
-#                   ),
-#     cells = dict(values = ['name_btc', 'name_quote', 'name_base'],
-#                 line_color='#1E90FF',
-#                 fill_color='#FFFFFF',
-#                 align = ['left', 'center'],
-#                 font = dict(color = '#696969', size = 10)
-#                 ),
-#     domain = dict(x=[0, 1], y=[0, 1]))
-#   )
-#   btcf.update_layout(paper_bgcolor='rgba(0,0,0,0)',
-#                   plot_bgcolor='rgba(0,0,0,0)',
-#                   margin=dict(l=0, r=0, t=0, b=0)
-#   )
-#   graphJSON = json.dumps(btcf, cls=plotly.utils.PlotlyJSONEncoder)
-#   return graphJSON
-
 
 
                       # dict(type='line', xref='x1', yref='y7', name='volperc', line_width=0.8,
@@ -329,14 +279,3 @@ def trades_order(variables_trades):
    
 # py.image.save_as({'data':data}, 'scatter_plot', format='png')
 # py.image.save_as(fig, 'my_plot.png')
-# f2c = variables_candles[0]
-  # mic = variables_candles[3]
-  # mac = variables_candles[4]
-  # avc = variables_candles[5]
-  # buyd = variables_candles[7]
-  # selld = variables_candles[8]
-  # buyu = variables_candles[9]
-  # sellu = variables_candles[10]
-  # ft = variables_candles[12]
-  # lt = variables_candles[13]
-  # averperc = variables_candles[19]
